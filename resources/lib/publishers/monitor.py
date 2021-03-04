@@ -103,4 +103,3 @@ class _Monitor(xbmc.Monitor):
         topic = Topic('onScreensaverDeactivated')
         kwargs = {}
         self.publish(Message(topic, **kwargs))
-

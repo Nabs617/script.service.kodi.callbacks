@@ -17,7 +17,6 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys
 import traceback
 import xbmc
 from resources.lib.taskABC import AbstractTask, KodiLogger, notify
@@ -62,10 +61,8 @@ class TaskBuiltin(AbstractTask):
                 msg = result
                 if result != '':
                     err = True
-        except Exception:
-            e = sys.exc_info()[0]
+        except Exception as e:
             err = True
-            if hasattr(e, 'message'):
-                msg = str(e.message)
-            msg = msg + '\n' + traceback.format_exc()
+            msg = str(e)
+
         self.threadReturn(err, msg)

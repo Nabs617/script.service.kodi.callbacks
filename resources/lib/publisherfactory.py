@@ -65,5 +65,3 @@ class PublisherFactory(object):
                 ipublisher = publisher(self.dispatcher, self.settings)
                 self.ipublishers.append(ipublisher)
                 self.logger.log(msg=_(self.publishers[publisher]))
-
-

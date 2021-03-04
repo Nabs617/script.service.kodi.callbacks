@@ -89,5 +89,3 @@ class WatchdogPublisher(Publisher):
                 item.join(timeout)
             else:
                 item.join()
-
-

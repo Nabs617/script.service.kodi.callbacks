@@ -106,7 +106,7 @@ def start():
     settings.getSettings()
     kl = KodiLogger()
     if settings.general['elevate_loglevel'] is True:
-        kl.setLogLevel(xbmc.LOGNOTICE)
+        kl.setLogLevel(xbmc.LOGINFO)
     else:
         kl.setLogLevel(xbmc.LOGDEBUG)
     log = kl.log
@@ -134,8 +134,8 @@ def start():
 
 
 def main():
-    msg = _(u'$$$ [kodi.callbacks] - Staring kodi.callbacks ver: %s (%s:build %s) python: %s').encode('utf-8') % (str(_addonversion_), branch, build, sys.version)
-    xbmc.log(msg=msg, level=xbmc.LOGNOTICE)
+    msg = _(u'$$$ [kodi.callbacks] - Staring kodi.callbacks ver: %s (%s:build %s) python: %s') % (str(_addonversion_), branch, build, sys.version)
+    xbmc.log(msg=msg, level=xbmc.LOGINFO)
     if branch != 'master':
         xbmcaddon.Addon().setSetting('installed branch', branch)
     start()
@@ -154,7 +154,7 @@ def main():
 if __name__ == '__main__':
 
     if testTasks:
-        KodiLogger.setLogLevel(KodiLogger.LOGNOTICE)
+        KodiLogger.setLogLevel(KodiLogger.LOGINFO)
         startdebugger()
         from resources.lib.tests.testTasks import testTasks
 

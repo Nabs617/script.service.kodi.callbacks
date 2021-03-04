@@ -132,13 +132,8 @@ class TaskPython(AbstractTask):
                 msg = result
                 if result != '':
                     err = True
-        except Exception:
-            e = sys.exc_info()[0]
+        except Exception as e:
             err = True
-            msg = u''
-            if hasattr(e, 'message'):
-                msg += unicode(e.message) + u'\n'
-            msg +=  unicode(e) + u'\n'
-            tb = traceback.format_exc()
-            msg += tb.decode('utf-8')
+            msg = str(e)
+
         self.threadReturn(err, msg)

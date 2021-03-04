@@ -82,4 +82,3 @@ class SubscriberFactory(object):
             return mytask
         else:
             return None
-

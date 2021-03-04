@@ -26,7 +26,7 @@ kodipo.updateAlways = True
 _ = kodipo.getLocalizedStringId
 
 def getSettingMock(sid):
-    assert isinstance(sid, str) or isinstance(sid, unicode)
+    assert isinstance(sid, str)
     return 'none'
 
 try:
@@ -57,8 +57,8 @@ class Settings(object):
         :return:
         :rtype: Category
         """
-        assert (isinstance(label, unicode) or isinstance(label, str))
-        label = unicode(label)
+        assert isinstance(label, str)
+        label = str(label)
         ret = None
         for c in self._categories:
             if c.label == label:
@@ -77,8 +77,8 @@ class Settings(object):
         :return:
         :rtype: Category
         """
-        if isinstance(category, str) or isinstance(category, unicode):
-            category = Category(unicode(category))
+        if isinstance(category, str):
+            category = Category(category)
             self._categories.append(category)
         elif isinstance(category, Category):
             self._categories.append(category)
@@ -94,7 +94,7 @@ class Settings(object):
         :param control:
         :type control: Control
         """
-        assert isinstance(catgorylabel, unicode) or isinstance(catgorylabel, str)
+        assert isinstance(catgorylabel, str)
         assert isinstance(control, Control)
         try:
             c = self.category(catgorylabel)
@@ -119,8 +119,8 @@ class Settings(object):
         :return:
         :rtype: Control
         """
-        assert isinstance(internal_ref, unicode) or isinstance(internal_ref, str)
-        internal_ref = unicode(internal_ref)
+        assert isinstance(internal_ref, str)
+        internal_ref = str(internal_ref)
         try:
             return self._controldict[internal_ref]
         except KeyError:
@@ -183,8 +183,8 @@ class Category(object):
         :param label:
         :type label: unicode or str
         """
-        assert (isinstance(label, unicode) or isinstance(label, str))
-        self.label = unicode(label)
+        assert isinstance(label, str)
+        self.label = str(label)
         self._controls = []
         self.indent = u'  '
 
@@ -205,7 +205,7 @@ class Category(object):
         :return:
         :rtype: Control
         """
-        assert isinstance(sid, unicode)
+        assert isinstance(sid, str)
         ret = None
         for c in self._controls:
             if c.id == sid:
@@ -268,12 +268,10 @@ class Control(object):
         :param internal_ref: If needed, a separate internal reference id for the control. Needed if more than one control shares the same sid (and values).
         :type internal_ref: unicode or string
         """
-        if isinstance(sid, str):
-            sid = unicode(sid)
-        if isinstance(label, str):
-            label = unicode(label)
-        assert isinstance(sid, unicode)
-        assert isinstance(label, unicode)
+        assert isinstance(sid, str)
+        assert isinstance(label, str)
+        sid = str(sid)
+        label = str(label)
         if enable is not None:
             if isinstance(enable, bool):
                 enable = Conditionals(Conditional(Conditional.OP_BOOLEAN, enable))
@@ -289,8 +287,8 @@ class Control(object):
             else:
                 assert isinstance(visible, Conditionals)
         if internal_ref is not None:
-            assert isinstance(internal_ref, str) or isinstance(internal_ref, unicode)
-            self.internal_ref = unicode(internal_ref)
+            assert isinstance(internal_ref, str)
+            self.internal_ref = str(internal_ref)
         else:
             self.internal_ref = sid
         self.sid = sid
@@ -398,14 +396,14 @@ class Text(Control):
         self.option = option
         if option is not None:
             if option == 'hidden':
-                self.option = unicode(option)
+                self.option = str(option)
             elif option == 'urlencoded':
-                self.option = unicode(option)
+                self.option = str(option)
             else:
                 raise SyntaxError('Text "option" not defined: %s' % option)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -443,8 +441,8 @@ class Ipaddress(Control):
         """
         super(Ipaddress, self).__init__('ipaddress', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -481,9 +479,7 @@ class Number(Control):
         super(Number, self).__init__('number', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
         if default is not None:
             if isinstance(default, int):
-                self.default = unicode(str(default))
-            else:
-                self.default = unicode(default)
+                self.default = str(default)
 
     def render(self, parent):
         elements = [u'%s<setting' % self.indent]
@@ -533,21 +529,21 @@ class Slider(Control):
         """
 
         super(Slider, self).__init__('slider', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
-        self.srangemin = unicode(srangemin)
-        self.srangemax = unicode(srangemax)
+        self.srangemin = str(srangemin)
+        self.srangemax = str(srangemax)
         if srangestep is not None:
-            self.srangestep = unicode(srangestep)
+            self.srangestep = str(srangestep)
         else:
             self.srangestep = u''
-        assert isinstance(option, unicode) or isinstance(option, str)
-        option = unicode(option)
+        assert isinstance(option, str)
+        option = str(option)
         if option == u'int' or option == u'float' or option == u'percent':
             self.option = option
         else:
             raise SyntaxError('Slider option must be "int|float|percent" got: %s' % option)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -605,8 +601,8 @@ class Date(Control):
         """
         super(Date, self).__init__('date', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -642,8 +638,8 @@ class Time(Control):
         """
         super(Time, self).__init__('time', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -679,7 +675,7 @@ class Bool(Control):
         """
         super(Bool, self).__init__('bool', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
         if default is not None:
-            if isinstance(default, unicode) or isinstance(default, str):
+            if isinstance(default, str):
                 if default.lower() == 'true':
                     self.default = u'true'
                 else:
@@ -749,8 +745,8 @@ class Select(Control):
             assert isinstance(values, list)
             self.values = values
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -796,8 +792,8 @@ class Addon(Control):
         :rtype:
         """
         super(Addon, self).__init__('addon', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
-        assert (isinstance(addontype, unicode) or isinstance(addontype, str))
-        self.addontype = unicode(addontype)
+        assert isinstance(addontype, str)
+        self.addontype = str(addontype)
         if multiselect is not None:
             assert isinstance(multiselect, bool)
             if multiselect is True:
@@ -807,8 +803,8 @@ class Addon(Control):
         else:
             self.multiselect = None
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert (isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -862,8 +858,8 @@ class Enum(Control):
             assert (isinstance(values, list) or values == u'$HOURS')
             self.values = values
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -940,8 +936,8 @@ class LabelEnum(Control):
         else:
             self.sort = sort
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -1011,11 +1007,11 @@ class FileBrowser(Control):
         else:
             assert (option == u'' or option == u'hideext')
             self.option = option
-        assert isinstance(mask, unicode) or isinstance(mask, str)
-        self.mask = mask
+        assert isinstance(mask, str)
+        self.mask = str(mask)
         if default is not None:
-            assert (isinstance(default, unicode) or isinstance(default, str))
-            self.default = unicode(default)
+            assert isinstance(default, str)
+            self.default = str(default)
         else:
             self.default = None
 
@@ -1060,8 +1056,8 @@ class Action(Control):
         :rtype:
         """
         super(Action, self).__init__('action', sid, label, enable, visible, subsetting, internal_ref=internal_ref)
-        assert (isinstance(action, unicode) or isinstance(action, str))
-        self.action = unicode(action)
+        assert isinstance(action, str)
+        self.action = str(action)
 
     def render(self, parent):
         elements = [u'%s<setting' % self.indent]
@@ -1152,14 +1148,14 @@ class Conditional(object):
             else:
                 self.value = u'false'
         elif operator != Conditional.OP_HAS_ADDON:
-            assert isinstance(reference, unicode) or isinstance(reference, str)
-            assert isinstance(value, unicode) or isinstance(value, str)
+            assert isinstance(reference, str)
+            assert isinstance(value, str)
             assert reference != u''
-            self.reference = unicode(reference)
-            self.value = unicode(value)
+            self.reference = str(reference)
+            self.value = str(value)
         else:
-            assert isinstance(value, unicode) or isinstance(value, str)
-            self.addonid = unicode(value)
+            assert isinstance(value, str)
+            self.addonid = str(value)
 
     def render(self, control, parent):
         """
@@ -1205,6 +1201,3 @@ class Conditional(object):
 getControlClass = {'sep': Sep, 'lsep':Lsep, 'text':Text, 'ipaddress':Ipaddress, 'number':Number, 'slider':Slider,
                    'date':Date, 'time':Time, 'bool':Bool, 'select':Select, 'addon':Addon, 'enum':Enum,
                    'labelenum':LabelEnum, 'browser':FileBrowser, 'action':Action}
-
-
-

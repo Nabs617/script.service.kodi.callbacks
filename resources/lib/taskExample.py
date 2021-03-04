@@ -111,13 +111,10 @@ class TaskCustom(AbstractTask):
             pass
             # Put your task implementation code here. Consider an inner try/except block accumulating specific error info
             # by setting err=True and appending to the message.
-        except Exception:
+        except Exception as e:
             # Non-specific error catching and processing.
-            e = sys.exc_info()[0]
             err = True
-            if hasattr(e, 'message'):
-                msg = str(e.message)
-            msg = msg + '\n' + traceback.format_exc()
+            msg = str(e)
         # The following needs to be the last call. Since this code is running in its own thread, to pass information
         # backout, the following is formatted and placed in an output Queue where the parent thread is waiting.
         # If you do not pass anything out, a memory leak will accumulate with 'TaskManagers' accumulating over time.

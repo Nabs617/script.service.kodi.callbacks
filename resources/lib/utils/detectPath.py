@@ -28,10 +28,10 @@ def process_cmdline(cmd):
     partss = shlex.split(cmds, posix= not sys.platform.lower().startswith('win'))
     parts = []
     for part in partss:
-        parts.append(unicode(part, encoding='utf-8'))
-    for i in xrange(0, len(parts)):
+        parts.append(str(part))
+    for i in range(0, len(parts)):
         found=-1
-        for j in xrange(i+1, len(parts)+1):
+        for j in range(i+1, len(parts)+1):
             t = u' '.join(parts[i:j])
             t = translatepath(t)
             t = t.strip(u'"')
@@ -51,16 +51,16 @@ def process_cmdline(cmd):
                     paths.append(path)
             else:
                 paths.append(path)
-        for i in xrange(0, len(parts)):
-            for j in xrange(0, len(paths)):
+        for i in range(0, len(parts)):
+            for j in range(0, len(paths)):
                 if i == paths[j][0]:
                     t = u' '.join(parts[i:paths[j][1]])
                     t = translatepath(t)
                     t = t.strip(u'"')
                     parts[i] = t
-                    for k in xrange(i+1, paths[j][1]):
+                    for k in range(i+1, paths[j][1]):
                         parts[k]=u''
-        for i in xrange(0, len(parts)):
+        for i in range(0, len(parts)):
             if parts[i] != u'':
                 args.append(parts[i])
     else:

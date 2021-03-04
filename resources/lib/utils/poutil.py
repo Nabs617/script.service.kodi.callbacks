@@ -35,7 +35,7 @@ except ImportError:
 
 def logprint(msg='', level=0):
     if msg != '' and level > -1:
-        print msg
+        print(msg)
 
 
 try:
@@ -44,7 +44,7 @@ try:
 except ImportError:
     NOXBMC = True
 else:
-    if xbmc.getFreeMem() == long(0):
+    if xbmc.getFreeMem() == int(0):
         NOXBMC = True
     else:
         NOXBMC = False
@@ -238,7 +238,7 @@ class PoDict(object):
         self.dict_msgctxt = dict()
         self.dict_msgid = dict()
         self.chkdict = dict()
-        self.remsgid = re.compile(ur'"([^"\\]*(?:\\.[^"\\]*)*)"')
+        self.remsgid = re.compile(r'"([^"\\]*(?:\\.[^"\\]*)*)"')
         self.savethread = threading.Thread()
 
     def get_new_key(self):
@@ -249,7 +249,7 @@ class PoDict(object):
         """
         if len(self.dict_msgctxt) > 0:
             with PoDict._rlock:
-                mmax = max(self.dict_msgctxt.iteritems(), key=operator.itemgetter(0))[0]
+                mmax = max(iter(self.dict_msgctxt.items()), key=operator.itemgetter(0))[0]
         else:
             mmax = '32000'
         try:
@@ -319,7 +319,7 @@ class PoDict(object):
                 while i < len(poin):
                     line = poin[i]
                     if line[0:7] == u'msgctxt':
-                        t = re.findall(ur'".+"', line)
+                        t = re.findall(r'".+"', line)
                         if not t[0].startswith(u'"Addon'):
                             str_msgctxt = t[0][2:7]
                             i += 1
@@ -329,12 +329,6 @@ class PoDict(object):
                                 str_msgid += self.remsgid.findall(line2)[0]
                                 i += 1
                                 line2 = poin[i]
-                            try:
-                                str_msgid = str_msgid.decode('unicode_escape')
-                            except UnicodeEncodeError:
-                                t = str_msgid.encode('utf-8')
-                                t = t.decode('string_escape')
-                                str_msgid = t.decode('utf-8')
                             self.dict_msgctxt[str_msgctxt] = str_msgid
                             self.dict_msgid[str_msgid] = str_msgctxt
                             self.chkdict[str_msgctxt] = False
@@ -342,7 +336,7 @@ class PoDict(object):
                             i += 1
                     i += 1
             except Exception as e:
-                log(msg=u'Error reading po: %s' % e.message)
+                log(msg=u'Error reading po: %s' % str(e))
         else:
             log(msg=u'Could not locate po at %s' % url)
 
@@ -416,22 +410,22 @@ class PoDict(object):
             try:
                 tree = ET.ElementTree(file=fn)
                 root = tree.getroot()
-                ret['id'] = unicode(root.attrib['id'], 'utf-8')
-                ret['name'] = unicode(root.attrib['name'], 'utf-8', errors='ignore')
-                ret['author'] = unicode(root.attrib['provider-name'], 'utf-8', errors='ignore')
-                ret['version'] = unicode(root.attrib['version'], 'utf-8', errors='ignore')
+                ret['id'] = str(root.attrib['id'])
+                ret['name'] = str(root.attrib['name'], errors='ignore')
+                ret['author'] = str(root.attrib['provider-name'], errors='ignore')
+                ret['version'] = str(root.attrib['version'], errors='ignore')
                 itrtr = tree.getiterator(tag='extension')
                 for elem in itrtr:
                     if elem.attrib['point'] == u"xbmc.addon.metadata":
                         citrtr = elem.getiterator()
                         for child in citrtr:
                             if child.attrib == {'lang': 'en'}:
-                                ret[child.tag] = unicode(child.text, 'utf-8', errors='ignore').strip()
+                                ret[child.tag] = str(child.text, errors='ignore').strip()
             except IOError:
                 log(msg=u'Error opening addon.xml file')
                 return None
             except SyntaxError as e:
-                log(u'Error parsing addon.xml: %s' % unicode(e))
+                log(u'Error parsing addon.xml: %s' % str(e))
                 return None
             else:
                 req_elements = ['id', 'name', 'author', 'version', 'summary', 'description', 'disclaimer']
@@ -451,9 +445,9 @@ class PoDict(object):
         """
         out = ''
         for (i, x) in enumerate(mstr):
-            if i == 1 and x == ur'"':
+            if i == 1 and x == r'"':
                 out += u"\\" + x
-            elif x == ur'"' and mstr[i - 1] != u"\\":
+            elif x == r'"' and mstr[i - 1] != u"\\":
                 out += u"\\" + x
             else:
                 out += x
@@ -501,10 +495,10 @@ class PoDict(object):
         :return:
         :rtype:
         """
-        w = ur'"#' + unicode(int_num) + ur'"'
+        w = r'"#' + str(int_num) + r'"'
         fileobject.write(u'msgctxt ' + w + u'\n')
         fileobject.write(PoDict.splitstring(str_msg))
-        fileobject.write(u'msgstr ' + ur'""' + u'\n')
+        fileobject.write(u'msgstr ' + r'""' + u'\n')
         fileobject.write(u'\n')
 
     @staticmethod
@@ -521,7 +515,7 @@ class PoDict(object):
             pass
         s = s.replace(u'\n', u'~@\n')
         split = s.split(u'\n')
-        for i in xrange(0, len(split)):
+        for i in range(0, len(split)):
             split[i] = split[i].replace(u'~@', u'\n').encode('unicode_escape') #TODO: Fix for unicode errors
             if i == 0:
                 if (len(split) == 2 and split[i + 1] == u'') or split[i] == u'\\n' or len(split) == 1:
@@ -584,7 +578,7 @@ class UpdatePo(object):
         self.podict.read_from_file(self.current_working_English_strings_po)
         self.exclude_directories = exclude_directories
         self.exclude_files = exclude_files
-        self.find_localizer = re.compile(ur'^(\S+?)\s*=\s*kodipo.getLocalizedString\s*$', flags=re.MULTILINE)
+        self.find_localizer = re.compile(r'^(\S+?)\s*=\s*kodipo.getLocalizedString\s*$', flags=re.MULTILINE)
 
     def getFileList(self):
         """
@@ -627,7 +621,7 @@ class UpdatePo(object):
                 if len(finds) != 1:
                     log(msg=u'Skipping file: %s, localizer not found' % myfile)
                 else:
-                    findstr = ur"%s\('(.+?)'\)" % finds[0]
+                    findstr = r"%s\('(.+?)'\)" % finds[0]
                     find = re.compile(findstr)
                     try:
                         finds = find.findall(lines)

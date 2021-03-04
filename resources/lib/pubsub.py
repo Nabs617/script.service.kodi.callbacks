@@ -17,11 +17,11 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import Queue
 import abc
 import copy
 import threading
 import time
+from queue import Queue, Empty
 from resources.lib.utils.poutil import KodiPo
 kodipo = KodiPo()
 _ = kodipo.getLocalizedString
@@ -51,7 +51,7 @@ class PrintLogger(BaseLogger):
     @staticmethod
     def log(loglevel=LOGLEVEL_INFO, msg='Log Event'):
         if loglevel >= BaseLogger.selfloglevel:
-            print msg
+            print(msg)
 
 class TaskReturn(object):
     def __init__(self, iserror=False, msg=''):
@@ -120,7 +120,7 @@ class Message(object):
 class Dispatcher(threading.Thread):
     def __init__(self, interval=0.1, sleepfxn=time.sleep):
         super(Dispatcher, self).__init__(name='Dispatcher')
-        self._message_q = Queue.Queue()
+        self._message_q = Queue()
         self._abort_evt = threading.Event()
         self._abort_evt.clear()
         self.subscribers = []
@@ -149,7 +149,7 @@ class Dispatcher(threading.Thread):
                 try:
                     msg = self._message_q.get_nowait()
                     assert isinstance(msg, Message)
-                except Queue.Empty:
+                except Empty:
                     continue
                 except AssertionError:
                     raise
@@ -202,7 +202,7 @@ class Task(threading.Thread):
         self.kwargs = {}
         self.userargs = []
         self.topic = None
-        self.returnQ = Queue.Queue()
+        self.returnQ = Queue()
 
     def t_start(self, topic, *args, **kwargs):
 
@@ -320,3 +320,4 @@ class Subscriber(object):
                 raise e
             else:
                 self.logger.log(self.loglevel, _(u'Task finalized for %s') % message.topic)
+

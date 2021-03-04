@@ -34,7 +34,6 @@ import os
 import sys
 import threading
 try:
-    import watchdog.utils.platform
     from watchdog.utils import platform
 except Exception:
     from resources.lib.watchdog.utils import platform
@@ -42,8 +41,6 @@ try:
     from watchdog.utils.compat import Event
 except Exception:
     from resources.lib.watchdog.utils.compat import Event
-
-from collections import namedtuple
 
 
 if sys.version_info[0] == 2 and platform.is_windows():

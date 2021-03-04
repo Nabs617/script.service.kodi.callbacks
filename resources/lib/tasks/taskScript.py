@@ -110,7 +110,7 @@ class TaskScript(AbstractTask):
         basedir = None
         sysexecutable = None
         for i, tmp in enumerate(tmpl):
-            tmp = unicode(xbmc.translatePath(tmp), encoding='utf-8')
+            tmp = str(xbmc.translatePath(tmp))
             if os.path.exists(tmp) and filefound is False:
                 basedir, fn = os.path.split(tmp)
                 basedir = os.path.realpath(basedir)
@@ -171,22 +171,16 @@ class TaskScript(AbstractTask):
                     stderrdata = stderrdata.decode(fse, 'ignore').strip()
                     if stderrdata != '':
                         msg += _(u'Process returned error: %s') % stderrdata
-        except ValueError, e:
-            err = True
-            msg = unicode(e)
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             err = True
             if hasattr(e, 'output'):
-                msg = unicode(e.output)
+                msg = str(e.output)
             else:
-                msg = unicode(e)
-        except Exception:
-            e = sys.exc_info()[0]
+                msg = str(e)
+        except Exception as e:
             err = True
-            if hasattr(e, 'message'):
-                msg = unicode(e.message)
-            msg = msg + u'\n' +traceback.format_exc().decode('utf-8', 'ignore')
+            msg = str(e)
         finally:
             os.chdir(cwd)
-        self.threadReturn(err, msg)
 
+        self.threadReturn(err, msg)

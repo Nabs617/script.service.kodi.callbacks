@@ -18,7 +18,7 @@
 #
 
 import threading
-import Queue
+import queue
 import abc
 import re
 import copy
@@ -61,9 +61,9 @@ class AbstractTask(threading.Thread):
         if self.userargs == '':
             return []
         ret = copy.copy(self.userargs)
-        ret = ret.replace(ur'%%', u'{@literal%@}')
+        ret = ret.replace(r'%%', u'{@literal%@}')
         if self.tasktype == 'script' or self.tasktype == 'python':
-            tmp = self.delimitregex.sub(ur'{@originaldelim@}', ret)
+            tmp = self.delimitregex.sub(r'{@originaldelim@}', ret)
             ret = tmp
         try:
             varArgs = events.AllEvents[self.topic.topic]['varArgs']
@@ -72,7 +72,7 @@ class AbstractTask(threading.Thread):
         else:
             for key in varArgs.keys():
                 try:
-                    kw = unicode(kwargs[varArgs[key]])
+                    kw = str(kwargs[varArgs[key]])
                     kw = kw.replace(u" ", u'%__')
                     ret = ret.replace(key, kw)
                 except KeyError:
@@ -81,7 +81,7 @@ class AbstractTask(threading.Thread):
                     pass
         ret = ret.replace(u'%__', u" ")
         ret = ret.replace(u'%_', u",")
-        ret = ret.replace(u'{@literal%@}', ur'%')
+        ret = ret.replace(u'{@literal%@}', r'%')
         if self.tasktype == 'script' or self.tasktype == 'python':
             ret = ret.split(u'{@originaldelim@}') # need to split first to avoid unicode error
             # if self.tasktype == 'script':

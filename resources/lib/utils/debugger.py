@@ -43,4 +43,3 @@ def startdebugger():
         pydevd.settrace('localhost', port=51234, stdoutToServer=True, stderrToServer=True, suspend=False)
     else:
         xbmc.log(msg='Debugger not found @: "%s"' % debugegg)
-

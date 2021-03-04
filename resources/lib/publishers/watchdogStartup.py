@@ -176,4 +176,3 @@ class WatchdogStartup(Publisher):
             log (msg=_('Watchdog Startup unpickling error'))
         else:
             return oldsnapshots
-

@@ -19,7 +19,7 @@
 import xbmc
 import threading
 
-def log(loglevel=xbmc.LOGNOTICE, msg=''):
+def log(loglevel=xbmc.LOGINFO, msg=''):
     if isinstance(msg, str):
         msg = msg.decode("utf-8")
     message = u"$$$ [%s] - %s" % ('kodi.callbacks', msg)
@@ -40,7 +40,7 @@ class KodiLogger(object):
     kodirunning = True
 
     def __new__(cls):
-        if xbmc.getFreeMem() == long():
+        if xbmc.getFreeMem() == int():
             KodiLogger.kodirunning = False
         if KodiLogger._instance is None:
             with KodiLogger._lock:
@@ -59,10 +59,9 @@ class KodiLogger(object):
     def log(loglevel=None, msg=''):
         if loglevel is None:
             loglevel = KodiLogger.selfloglevel
-        if isinstance(msg, str):
-            msg = msg.decode("utf-8")
+        msg = str(msg)
         if KodiLogger.kodirunning:
             message = u"$$$ [%s] - %s" % (u'kodi.callbacks', msg)
-            xbmc.log(msg=message.encode("utf-8", 'replace'), level=loglevel)
+            xbmc.log(msg=message, level=loglevel)
         else:
-            print msg
+            print(msg)

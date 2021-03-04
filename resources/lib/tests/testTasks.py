@@ -42,7 +42,7 @@ setPathExecuteRW(testdir)
 
 def is_xbmc_debug():
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.GetSettingValue", "params": {"setting":"debug.showloginfo"} }')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = str(json_query, errors='ignore')
     json_response = json.loads(json_query)
     if json_response.has_key('result'):
         if json_response['result'].has_key('value'):
@@ -56,7 +56,7 @@ def is_xbmc_debug():
 def getWebserverInfo():
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.getSettings", "params":'
                                      ' {"filter":{"section":"services", "category":"webserver"}}}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = str(json_query, errors='ignore')
     json_response = json.loads(json_query)
 
     if json_response.has_key('result') and json_response['result'].has_key('settings') and json_response['result']['settings'] is not None:
@@ -259,14 +259,8 @@ class testTasks(object):
                 test()
             except AssertionError as e:
                 log(msg=_('Error testing %s: %s') % (testname, str(e)))
-            except Exception:
-                msg = _('Error testing %s\n') % testname
-                e = sys.exc_info()[0]
-                if hasattr(e, 'message'):
-                    msg += str(e.message)
-                else:
-                    msg += str(e)
-                msg = msg + '\n' + traceback.format_exc()
+            except Exception as e:
+                msg = str(e)
                 log(loglevel=xbmc.LOGERROR, msg=msg)
             else:
                 log(msg=_('Test passed for task %s') % str(testname))

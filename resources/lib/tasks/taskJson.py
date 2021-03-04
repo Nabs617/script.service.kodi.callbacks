@@ -58,14 +58,11 @@ class TaskJsonNotify(AbstractTask):
             qs = u'{ "jsonrpc": "2.0", "id": 0, "method": "JSONRPC.NotifyAll", "params": {"sender":"%s", "message":"%s", "data":%s} }' %(self.taskKwargs['jsonnotify'], message, data)
             qs = qs.encode('utf-8', 'ignore')
             json_query = xbmc.executeJSONRPC(qs)
-            json_query = unicode(json_query, 'utf-8', 'ignore')
+            json_query = str(json_query, 'utf-8', 'ignore')
             json_response = json.loads(json_query)
-        except Exception:
-            e = sys.exc_info()[0]
+        except Exception as e:
             err = True
-            if hasattr(e, 'message'):
-                msg = unicode(e.message)
-            msg = msg + u'\n' + unicode(traceback.format_exc())
+            msg = str(e)
         else:
             if json_response.has_key('result'):
                 if json_response['result'] != u'OK':
@@ -73,6 +70,6 @@ class TaskJsonNotify(AbstractTask):
                     msg = u'JSON Notify Error %s' % json_response['result']
             else:
                 err = True
-                msg = u'JSON Notify Error: %s' % unicode(json_response)
+                msg = u'JSON Notify Error: %s' % str(json_response)
 
         self.threadReturn(err, msg)

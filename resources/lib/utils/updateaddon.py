@@ -132,7 +132,7 @@ class UpdateAddon(object):
         sorteddir = UpdateAddon.datesorteddir(destdir)
         num = len(sorteddir)
         if num > numbackups:
-            for i in xrange(0, num - numbackups):
+            for i in range(0, num - numbackups):
                 try:
                     os.remove(sorted(sorteddir)[i][2])
                 except OSError:
@@ -161,6 +161,9 @@ class UpdateAddon(object):
     def is_v1_gt_v2(version1, version2):
         def normalize(v):
             return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
+
+        def cmp(a, b):
+            return (a > b) - (a < b)
 
         result = cmp(normalize(version1), normalize(version2))
         if result == 1:

@@ -16,11 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+
 import os
 import pkgutil
 import sys
 
-import tasks
+from resources.lib import tasks
 from resources.lib.kodilogging import KodiLogger
 from resources.lib.taskABC import AbstractTask
 from resources.lib.utils.kodipathtools import translatepath, setPathExecuteRW, setPathRW

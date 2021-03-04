@@ -70,7 +70,7 @@ def createTasks():
     tasks = []
     last_id = None
     taskcontrols = []
-    for i in xrange(1, 11):
+    for i in range(1, 11):
         tasks.append('Task %i' % i)
         prefix = "T%s" % str(i)
         curTaskType = '%s.type' % prefix
@@ -105,7 +105,7 @@ def createTasks():
                 try:
                     option = varset['option']
                 except KeyError:
-                    conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, unicode(key), curTaskType)
+                    conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, str(key), curTaskType)
                     if varset['type'] == 'sfile':
                         labelbrowse = u'%s - browse' % varset['label']
                         labeledit = u'%s - edit' % varset['label']
@@ -128,7 +128,7 @@ def createTasks():
                                     default=varset['default'],
                                     visible=conditionals))
                 else:
-                    conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, unicode(key), curTaskType)
+                    conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, str(key), curTaskType)
                     if varset['type'] == 'sfile':
                         labelbrowse = '%s - browse' % varset['label']
                         labeledit = '%s - edit' % varset['label']
@@ -163,7 +163,7 @@ def createEvents(tasks):
     eventcontrols = []
 
     last_id = None
-    for i in xrange(1, 11):
+    for i in range(1, 11):
         prefix = 'E%s' % str(i)
         curEvtType = '%s.type' % prefix
         action_evt = 'RunScript(script.service.kodi.callbacks, lselector, id=%s.type, heading=%s, lvalues=%s)' % (
@@ -250,7 +250,7 @@ def createEvents(tasks):
                     lines.append(vs[x+1:])
                     for line in lines:
                         eventcontrols.append(struct.Lsep(label=line, visible=conditionals))
-        conditionals = struct.Conditional(struct.Conditional.OP_NOT_EQUAL, unicode(glsid('None')), curEvtType)
+        conditionals = struct.Conditional(struct.Conditional.OP_NOT_EQUAL, str(glsid('None')), curEvtType)
         eventcontrols.append(
             struct.Text('%s.userargs' % prefix, 'Var subbed arg string', default='', visible=conditionals))
         eventcontrols.append(struct.Action('%s.test' % prefix, 'Test Command (click OK to save changes first)',

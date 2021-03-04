@@ -36,7 +36,7 @@ from resources.lib.utils.poutil import KodiPo
 
 def notify(msg):
     dialog = xbmcgui.Dialog()
-    dialog.notification('Kodi Callabacks', msg, xbmcgui.NOTIFICATION_INFO, 5000)
+    dialog.notification('Kodi Callbacks', msg, xbmcgui.NOTIFICATION_INFO, 5000)
 
 
 kodipo = KodiPo()

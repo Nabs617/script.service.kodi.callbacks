@@ -56,7 +56,7 @@ def get(settingid, var_type):
     t = xbmcaddon.Addon(addonid).getSetting(settingid)
     if var_type == 'text' or var_type == 'file' or var_type == 'folder' or var_type == 'sfile' or var_type == 'sfolder' or var_type == 'labelenum':
         try:
-            t = unicode(t, 'utf-8', errors='ignore')
+            t = str(t)#, errors='ignore')
         except UnicodeDecodeError:
             pass
         return t
@@ -106,8 +106,8 @@ class Settings(object):
         self.getGeneralSettings()
 
     def getTaskSettings(self):
-        for i in xrange(1, 11):
-            pid = u'T%s' % unicode(i)
+        for i in range(1, 11):
+            pid = u'T%s' % str(i)
             tsk = self.getTaskSetting(pid)
             if tsk is not None:
                 self.tasks[pid] = tsk
@@ -127,8 +127,8 @@ class Settings(object):
             return tsk
 
     def getEventSettings(self):
-        for i in xrange(1, 11):
-            pid = u"E%s" % unicode(i)
+        for i in range(1, 11):
+            pid = u"E%s" % str(i)
             evt = self.getEventSetting(pid)
             if evt is not None:
                 self.events[pid] = evt
@@ -140,6 +140,7 @@ class Settings(object):
         if et == podict.has_msgid('None')[1]:
             return
         else:
+            import web_pdb; web_pdb.set_trace()
             et = _(et)
             et = Settings.eventsReverseLookup[et]
             evt['type'] = et

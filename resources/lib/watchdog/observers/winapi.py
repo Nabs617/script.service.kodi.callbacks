@@ -39,7 +39,6 @@
 from __future__ import with_statement
 
 import ctypes.wintypes
-import struct
 from functools import reduce
 
 try:
@@ -255,7 +254,7 @@ WATCHDOG_FILE_NOTIFY_FLAGS = reduce(
 
 BUFFER_SIZE = 2048
 
-    
+
 def _parse_event_buffer(readBuffer, nBytes):
     results = []
     while nBytes > 0:
@@ -318,27 +317,27 @@ class WinAPINativeEvent(object):
     def __init__(self, action, src_path):
         self.action = action
         self.src_path = src_path
-    
+
     @property
     def is_added(self):
         return self.action == FILE_ACTION_CREATED
-    
+
     @property
     def is_removed(self):
         return self.action == FILE_ACTION_REMOVED
-    
+
     @property
     def is_modified(self):
         return self.action == FILE_ACTION_MODIFIED
-    
+
     @property
     def is_renamed_old(self):
         return self.action == FILE_ACTION_RENAMED_OLD_NAME
-    
+
     @property
     def is_renamed_new(self):
         return self.action == FILE_ACTION_RENAMED_NEW_NAME
-    
+
     def __repr__(self):
         return ("<WinAPINativeEvent: action=%d, src_path=%r>" % (self.action, self.src_path))
 

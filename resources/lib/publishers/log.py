@@ -19,7 +19,7 @@
 
 import xbmc
 import threading
-from Queue import Queue, Empty
+from queue import Queue, Empty
 import re
 import codecs
 from resources.lib.pubsub import Publisher, Topic, Message

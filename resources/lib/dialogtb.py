@@ -63,7 +63,7 @@ def show_textbox(title, msg):
     _cwd_ = xbmc.translatePath(_addon_.getAddonInfo('path'))
     msgbox = MessageDialog(u"DialogTextBox.xml", _cwd_, u"Default")
     xt = type(msg)
-    if xt is str or xt is unicode:
+    if xt is str:
         wmsg = u'\n'.join(textwrap.wrap(msg, 62))
     elif xt is list:
         tmsg = []
@@ -80,4 +80,3 @@ def show_textbox(title, msg):
     msgbox.set_text(title, wmsg)
     msgbox.doModal()
     del msg
-

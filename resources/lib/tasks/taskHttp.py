@@ -20,9 +20,9 @@
 import sys
 import traceback
 import requests
-import urllib2
-import httplib
-from urlparse import urlparse
+import urllib
+import http.client
+from urllib.parse import urlparse
 import socket
 from resources.lib.taskABC import AbstractTask, KodiLogger, notify
 from resources.lib.utils.poutil import KodiPo
@@ -107,7 +107,7 @@ class TaskHttp(AbstractTask):
             prepped = session.prepare_request(req)
         except httplib.InvalidURL as e:
             err = True
-            msg = unicode(e, 'utf-8')
+            msg = str(e)
             return err, msg
         if verb == 'POST' or verb == 'PUT':
             prepped.headers['Content-Type'] = self.taskKwargs['content-type']
@@ -147,29 +147,24 @@ class TaskHttp(AbstractTask):
         except requests.RequestException as e:
             err = True
             msg = u'%s: %s' %(_(u'Generic Requests Error'), str(e))
-        except urllib2.HTTPError, e:
+        except urllib.error.HTTPError as e:
             err = True
-            msg = _(u'HTTPError = ') + unicode(e.code)
-        except urllib2.URLError, e:
+            msg = _(u'HTTPError\n') + str(e.code)
+        except urllib.error.URLError as e:
             err = True
-            msg = _(u'URLError\n') + unicode(e.reason)
+            msg = _(u'URLError\n') + str(e.reason)
         except httplib.BadStatusLine:
             err = False
             self.log(msg=_(u'Http Bad Status Line caught and passed'))
-        except httplib.HTTPException, e:
+        except httplib.HTTPException as e:
             err = True
-            msg = _(u'HTTPException')
-            if hasattr(e, 'message'):
-                msg = msg + u'\n' + unicode(e.message)
+            msg = _(u'HTTPException\n') + str(e)
         except socket.timeout:
             err = True
             msg = _(u'The request timed out, host unreachable')
-        except Exception:
+        except Exception as e:
             err = True
-            e = sys.exc_info()[0]
-            if hasattr(e, 'message'):
-                msg = unicode(e.message, errors='ignore')
-            msg = msg + u'\n' + unicode(traceback.format_exc(), errors='ignore')
+            msg = str(e)
         return err, msg
 
 
@@ -199,4 +194,3 @@ class TaskHttp(AbstractTask):
 
         s.close()
         self.threadReturn(err, msg)
-

@@ -73,4 +73,3 @@ class InotifyBuffer(BaseThread):
                         self._queue.put(inotify_event)
                 else:
                     self._queue.put(inotify_event)
-

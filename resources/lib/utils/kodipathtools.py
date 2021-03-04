@@ -67,15 +67,15 @@ def secure_filename(path):
 def translatepath(path):
     ret = []
     if path.lower().startswith(u'special://'):
-        special = re.split(ur'\\|/', path[10:])[0]
+        special = re.split(r'\\|/', path[10:])[0]
         if special.startswith(u'addondata'):
-            myid = re.findall(ur'addondata\((.+?)\)', special)
+            myid = re.findall(r'addondata\((.+?)\)', special)
             if len(myid) > 0:
                 ret.append(addondatapath(myid[0]))
             else:
                 ret.append(addondatapath())
         elif special.startswith(u'addon'):
-            myid = re.findall(ur'addon\((.+?)\)', special)
+            myid = re.findall(r'addon\((.+?)\)', special)
             if len(myid) > 0:
                 ret.append(addonpath(myid[0]))
             else:
@@ -83,9 +83,9 @@ def translatepath(path):
         else:
             ret.append(kodiTP(u'special://%s' % special))
         path = path[10:]
-        ret = ret + re.split(ur'\\|/', path)[1:]
+        ret = ret + re.split(r'\\|/', path)[1:]
     else:
-        ret = re.split(ur'\\|/', path)
+        ret = re.split(r'\\|/', path)
     if ret[0].endswith(':'):
         ret[0] = u'%s\\' % ret[0]
     for i, r in enumerate(ret):
@@ -106,7 +106,7 @@ def translatepath(path):
 
 def kodiTranslatePathMock(path):
     ret = []
-    special = re.split(ur'\\|/', path[10:])[0]
+    special = re.split(r'\\|/', path[10:])[0]
     if special == u'home':
         ret.append(homepath())
     elif special == u'logpath':
@@ -121,7 +121,7 @@ def addonpath(addon_id=u'script.service.kodi.callbacks'):
         path = os.path.join(*[homepath(), u'addons', addon_id])
     else:
         try:
-            path = unicode(xbmcaddon.Addon(addon_id).getAddonInfo('path'))
+            path = str(xbmcaddon.Addon(addon_id).getAddonInfo('path'))
         except RuntimeError:
             path = ''
     if path == '':
@@ -138,9 +138,9 @@ def addondatapath(addon_id=u'script.service.kodi.callbacks'):
 
 
 def homepath():
-    paths = {'win': ur'%APPDATA%\Kodi', 'nix': ur'$HOME/.kodi', 'osx': ur'~/Library/Application Support/Kodi',
-             'ios': ur'/private/var/mobile/Library/Preferences/Kodi',
-             'and': ur' /sdcard/Android/data/org.xbmc.kodi/files/.kodi/'}
+    paths = {'win': r'%APPDATA%\Kodi', 'nix': r'$HOME/.kodi', 'osx': r'~/Library/Application Support/Kodi',
+             'ios': r'/private/var/mobile/Library/Preferences/Kodi',
+             'and': r' /sdcard/Android/data/org.xbmc.kodi/files/.kodi/'}
     if isStub:
         return translatepath(paths[getPlatform()])
     else:
@@ -148,9 +148,9 @@ def homepath():
 
 
 def logpath():
-    paths = {'win': ur'%APPDATA%\Kodi\kodi.log', 'nix': ur'$HOME/.kodi/temp/kodi.log', 'osx': ur'~/Library/Logs/kodi.log',
-             'ios': ur'/private/var/mobile/Library/Preferences/kodi.log',
-             'and': ur'/sdcard/Android/data/org.xbmc.kodi/files/.kodi/temp/kodi.log'}
+    paths = {'win': r'%APPDATA%\Kodi\kodi.log', 'nix': r'$HOME/.kodi/temp/kodi.log', 'osx': r'~/Library/Logs/kodi.log',
+             'ios': r'/private/var/mobile/Library/Preferences/kodi.log',
+             'and': r'/sdcard/Android/data/org.xbmc.kodi/files/.kodi/temp/kodi.log'}
     if isStub:
         return translatepath(paths[getPlatform()])
     else:

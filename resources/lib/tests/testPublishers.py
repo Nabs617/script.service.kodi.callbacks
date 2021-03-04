@@ -41,7 +41,7 @@ import nose
 # from nose.plugins.skip import SkipTest
 
 def printlog(msg,level=0):
-    print msg, level
+    print(msg, level)
 
 
 flexmock(xbmc, log=printlog)
@@ -433,7 +433,7 @@ class testLog(object):
         import random, string
         randomstring = ''.join(random.choice(string.lowercase) for _ in range(30)) + '\n'
         targetstring = '%s%s%s' % (randomstring[:12], 'kodi_callbacks', randomstring[20:])
-        for i in xrange(0, 10):
+        for i in range(0, 10):
             with open(testLog.fn, 'a') as f:
                 if i == 5:
                     f.writelines(targetstring)

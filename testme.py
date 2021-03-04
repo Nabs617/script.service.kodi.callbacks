@@ -89,5 +89,3 @@ if __name__ == '__main__' or __name__ == 'Tasks':
         else:
             xargs.append(stripquotes(xarg))
     run(xargs, kwargs)
-
-

@@ -161,7 +161,7 @@ class Player(xbmc.Player):
                 t = info[u'artist']
                 if isinstance(t, list) and len(t) > 0:
                     info[u'artist'] = t[0]
-                elif isinstance(t, unicode):
+                elif isinstance(t, str):
                     if t != u'':
                         info[u'artist'] = t
                     else:
@@ -226,22 +226,22 @@ class Player(xbmc.Player):
                     if info[u'stereomode'] == u'':
                         info[u'stereomode'] = u'unknown'
                 try:
-                    info[u'width'] = unicode(sd[u'video'][0][u'width'])
+                    info[u'width'] = str(sd[u'video'][0][u'width'])
                 except (KeyError, IndexError):
                     info[u'width'] = u'unknown'
                 try:
-                    info[u'height'] = unicode(sd[u'video'][0][u'height'])
+                    info[u'height'] = str(sd[u'video'][0][u'height'])
                 except (KeyError, IndexError):
                     info[u'height'] = u'unknown'
                 try:
-                    info[u'aspectRatio'] = unicode(int((sd[u'video'][0][u'aspect'] * 100.0) + 0.5) / 100.0)
+                    info[u'aspectRatio'] = str(int((sd[u'video'][0][u'aspect'] * 100.0) + 0.5) / 100.0)
                 except (KeyError, IndexError):
                     info[u'aspectRatio'] = u'unknown'
             if info[u'mediaType'] == u'episode':
                 items = [u'episode', u'season']
                 for item in items:
                     try:
-                        info[item] = unicode(info[item]).zfill(2)
+                        info[item] = str(info[item]).zfill(2)
                     except KeyError:
                         info[item] = u'unknown'
             else:
