@@ -411,16 +411,16 @@ class PoDict(object):
                 tree = ET.ElementTree(file=fn)
                 root = tree.getroot()
                 ret['id'] = str(root.attrib['id'])
-                ret['name'] = str(root.attrib['name'], errors='ignore')
-                ret['author'] = str(root.attrib['provider-name'], errors='ignore')
-                ret['version'] = str(root.attrib['version'], errors='ignore')
+                ret['name'] = str(root.attrib['name'])
+                ret['author'] = str(root.attrib['provider-name'])
+                ret['version'] = str(root.attrib['version'])
                 itrtr = tree.getiterator(tag='extension')
                 for elem in itrtr:
                     if elem.attrib['point'] == u"xbmc.addon.metadata":
                         citrtr = elem.getiterator()
                         for child in citrtr:
                             if child.attrib == {'lang': 'en'}:
-                                ret[child.tag] = str(child.text, errors='ignore').strip()
+                                ret[child.tag] = str(child.text).strip()
             except IOError:
                 log(msg=u'Error opening addon.xml file')
                 return None

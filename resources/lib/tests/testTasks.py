@@ -42,7 +42,7 @@ setPathExecuteRW(testdir)
 
 def is_xbmc_debug():
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.GetSettingValue", "params": {"setting":"debug.showloginfo"} }')
-    json_query = str(json_query, errors='ignore')
+    json_query = str(json_query)
     json_response = json.loads(json_query)
     if json_response.has_key('result'):
         if json_response['result'].has_key('value'):
@@ -56,7 +56,7 @@ def is_xbmc_debug():
 def getWebserverInfo():
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.getSettings", "params":'
                                      ' {"filter":{"section":"services", "category":"webserver"}}}')
-    json_query = str(json_query, errors='ignore')
+    json_query = str(json_query)
     json_response = json.loads(json_query)
 
     if json_response.has_key('result') and json_response['result'].has_key('settings') and json_response['result']['settings'] is not None:

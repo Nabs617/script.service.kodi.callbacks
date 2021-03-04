@@ -56,7 +56,7 @@ def get(settingid, var_type):
     t = xbmcaddon.Addon(addonid).getSetting(settingid)
     if var_type == 'text' or var_type == 'file' or var_type == 'folder' or var_type == 'sfile' or var_type == 'sfolder' or var_type == 'labelenum':
         try:
-            t = str(t)#, errors='ignore')
+            t = str(t)
         except UnicodeDecodeError:
             pass
         return t
