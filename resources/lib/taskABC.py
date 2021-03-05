@@ -53,7 +53,7 @@ class AbstractTask(threading.Thread):
         self.topic = None
         self.type = ''
         self.taskId = ''
-        self.returnQ = Queue.Queue()
+        self.returnQ = queue.Queue()
         self.delimitregex = re.compile(r'\s+,\s+|,\s+|\s+')
 
 
