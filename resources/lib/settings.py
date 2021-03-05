@@ -140,7 +140,6 @@ class Settings(object):
         if et == podict.has_msgid('None')[1]:
             return
         else:
-            import web_pdb; web_pdb.set_trace()
             et = _(et)
             et = Settings.eventsReverseLookup[et]
             evt['type'] = et
