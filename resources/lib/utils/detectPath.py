@@ -24,8 +24,7 @@ from resources.lib.utils.kodipathtools import translatepath
 
 def process_cmdline(cmd):
     posspaths = []
-    cmds = cmd.encode('utf-8')
-    partss = shlex.split(cmds, posix= not sys.platform.lower().startswith('win'))
+    partss = shlex.split(cmd, posix= not sys.platform.lower().startswith('win'))
     parts = []
     for part in partss:
         parts.append(str(part))

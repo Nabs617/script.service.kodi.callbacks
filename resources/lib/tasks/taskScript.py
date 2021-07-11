@@ -142,7 +142,6 @@ class TaskScript(AbstractTask):
             args = ' '.join(args)
         err = False
         msg += u'taskScript ARGS = %s\n    SYSEXEC = %s\n BASEDIR = %s\n' % (args, sysexecutable, basedir)
-        sys.exc_clear()
 
         try:
             if basedir is not None:
