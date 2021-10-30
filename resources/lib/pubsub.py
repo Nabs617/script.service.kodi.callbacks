@@ -33,8 +33,7 @@ LOGLEVEL_INFO = 20
 LOGLEVEL_DEBUG = 10
 
 
-class BaseLogger(object):
-    __metaclass__ = abc.ABCMeta
+class BaseLogger(object, metaclass=abc.ABCMeta):
     selfloglevel = LOGLEVEL_INFO
 
     @staticmethod
@@ -106,7 +105,7 @@ class Topic(object):
 
     def __repr__(self):
         if self.has_subtopic():
-            return u'%s:%s' % (self.topic, self.subtopic)
+            return '%s:%s' % (self.topic, self.subtopic)
         else:
             return self.topic
 
@@ -120,7 +119,7 @@ class Message(object):
 class Dispatcher(threading.Thread):
     def __init__(self, interval=0.1, sleepfxn=time.sleep):
         super(Dispatcher, self).__init__(name='Dispatcher')
-        self._message_q = queue()
+        self._message_q = Queue()
         self._abort_evt = threading.Event()
         self._abort_evt.clear()
         self.subscribers = []
@@ -172,8 +171,7 @@ class Dispatcher(threading.Thread):
                 self.join(timeout)
 
 
-class Publisher(object):
-    __metaclass__ = abc.ABCMeta
+class Publisher(object, metaclass=abc.ABCMeta):
     def __init__(self, dispatcher):
         self.dispatcher = dispatcher
 
@@ -194,9 +192,7 @@ class Publisher(object):
 
 
 
-class Task(threading.Thread):
-    __metaclass__ = abc.ABCMeta
-
+class Task(threading.Thread, metaclass=abc.ABCMeta):
     def __init__(self):
         super(Task, self).__init__(name='Task')
         self.kwargs = {}
@@ -308,16 +304,16 @@ class Subscriber(object):
     def notify(self, message):
         for taskmanager in self.taskmanagers:
             try:
-                self.logger.log(self.loglevel, _(u'Task starting for %s') % message.topic)
+                self.logger.log(self.loglevel, _('Task starting for %s') % message.topic)
                 taskmanager.start(message.topic, **message.kwargs)
             except TaskManagerException_TaskAlreadyRunning as e:
-                self.logger.log(self.loglevel, u'%s - %s' % (message.topic, e.message))
+                self.logger.log(self.loglevel, '%s - %s' % (message.topic, e.message))
             except TaskManagerException_TaskInRefractoryPeriod as e:
-                self.logger.log(self.loglevel, u'%s - %s' % (message.topic, e.message))
+                self.logger.log(self.loglevel, '%s - %s' % (message.topic, e.message))
             except TaskManagerException_TaskCountExceeded as e:
-                self.logger.log(self.loglevel, u'%s - %s' % (message.topic, e.message))
+                self.logger.log(self.loglevel, '%s - %s' % (message.topic, e.message))
             except Exception as e:
                 raise e
             else:
-                self.logger.log(self.loglevel, _(u'Task finalized for %s') % message.topic)
+                self.logger.log(self.loglevel, _('Task finalized for %s') % message.topic)
 

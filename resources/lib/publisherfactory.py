@@ -60,7 +60,7 @@ class PublisherFactory(object):
         self.ipublishers = []
 
     def createPublishers(self):
-        for publisher in self.publishers.keys():
+        for publisher in list(self.publishers.keys()):
             if not set(self.topics).isdisjoint(publisher.publishes) or self.debug is True:
                 ipublisher = publisher(self.dispatcher, self.settings)
                 self.ipublishers.append(ipublisher)

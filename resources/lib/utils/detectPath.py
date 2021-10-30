@@ -31,9 +31,9 @@ def process_cmdline(cmd):
     for i in range(0, len(parts)):
         found=-1
         for j in range(i+1, len(parts)+1):
-            t = u' '.join(parts[i:j])
+            t = ' '.join(parts[i:j])
             t = translatepath(t)
-            t = t.strip(u'"')
+            t = t.strip('"')
             if os.path.exists(t):
                 if j > found:
                     found = j
@@ -53,14 +53,14 @@ def process_cmdline(cmd):
         for i in range(0, len(parts)):
             for j in range(0, len(paths)):
                 if i == paths[j][0]:
-                    t = u' '.join(parts[i:paths[j][1]])
+                    t = ' '.join(parts[i:paths[j][1]])
                     t = translatepath(t)
-                    t = t.strip(u'"')
+                    t = t.strip('"')
                     parts[i] = t
                     for k in range(i+1, paths[j][1]):
-                        parts[k]=u''
+                        parts[k]=''
         for i in range(0, len(parts)):
-            if parts[i] != u'':
+            if parts[i] != '':
                 args.append(parts[i])
     else:
         args = parts

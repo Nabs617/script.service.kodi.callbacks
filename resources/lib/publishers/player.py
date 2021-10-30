@@ -29,14 +29,14 @@ _ = kodipo.getLocalizedString
 
 
 class PlayerPublisher(threading.Thread, Publisher):
-    publishes = Events.Player.keys()
+    publishes = list(Events.Player.keys())
 
     def __init__(self, dispatcher, settings):
         assert settings is not None
         Publisher.__init__(self, dispatcher)
         threading.Thread.__init__(self, name='PlayerPublisher')
         self.dispatcher = dispatcher
-        self.publishes = Events.Player.keys()
+        self.publishes = list(Events.Player.keys())
         self._abortevt = threading.Event()
         self._abortevt.clear()
 
@@ -113,7 +113,7 @@ class Player(xbmc.Player):
                 tries += 1
             title = xbmc.getInfoLabel('MusicPlayer.Title')
             if title is None or title == '':
-                return u'Kodi cannot detect title'
+                return 'Kodi cannot detect title'
             else:
                 return title
         elif self.isPlayingVideo():
@@ -137,19 +137,19 @@ class Player(xbmc.Player):
                         title = ''
                     else:
                         try:
-                            title = ret[u'result'][u'item'][u'title']
+                            title = ret['result']['item']['title']
                         except KeyError:
-                            title = u'Kodi cannot detect title'
+                            title = 'Kodi cannot detect title'
                         else:
-                            if title == u'':
-                                title = ret[u'result'][u'item'][u'label']
-                            if title == u'':
-                                title = u'Kodi cannot detect title'
+                            if title == '':
+                                title = ret['result']['item']['label']
+                            if title == '':
+                                title = 'Kodi cannot detect title'
                     return title
                 else:
                     return title
         else:
-            return u'Kodi cannot detect title - none playing'
+            return 'Kodi cannot detect title - none playing'
 
     def getAudioInfo(self, playerid):
         try:
@@ -157,26 +157,26 @@ class Player(xbmc.Player):
                 '{"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title", "album",'
                 ' "artist", "duration", "file", "streamdetails"], "playerid": %s }, "id": "AudioGetItem"}'
                 % playerid))['result']['item']
-            if u'artist' in info.keys():
-                t = info[u'artist']
+            if 'artist' in list(info.keys()):
+                t = info['artist']
                 if isinstance(t, list) and len(t) > 0:
-                    info[u'artist'] = t[0]
+                    info['artist'] = t[0]
                 elif isinstance(t, str):
-                    if t != u'':
-                        info[u'artist'] = t
+                    if t != '':
+                        info['artist'] = t
                     else:
-                        info[u'artist'] = u'unknown'
+                        info['artist'] = 'unknown'
                 else:
-                    info[u'artist'] = u'unknown'
+                    info['artist'] = 'unknown'
             else:
-                info[u'artist'] = u'unknown'
-            items = [u'duration', u'id', u'label', u'type']
+                info['artist'] = 'unknown'
+            items = ['duration', 'id', 'label', 'type']
             for item in items:
                 try:
                     del info[item]
                 except KeyError:
                     pass
-            info[u'mediaType'] = u'audio'
+            info['mediaType'] = 'audio'
         except RuntimeError:
             self.info = {}
         else:
@@ -191,21 +191,21 @@ class Player(xbmc.Player):
         except RuntimeError:
             self.info = {}
         else:
-            items = [u'label', u'id', u'tvshowid']
+            items = ['label', 'id', 'tvshowid']
             for item in items:
                 try:
                     del info[item]
                 except KeyError:
                     pass
-            items = {u'mediaType': u'type', u'fileName': u'file'}
-            for item in items.keys():
+            items = {'mediaType': 'type', 'fileName': 'file'}
+            for item in list(items.keys()):
                 try:
                     t = items[item]
                     info[item] = info.pop(t, 'unknown')
                 except KeyError:
-                    info[item] = u'unknown'
+                    info[item] = 'unknown'
             if info['mediaType'] != 'musicvideo':
-                items = [u'artist', u'album']
+                items = ['artist', 'album']
                 for item in items:
                     try:
                         del info[item]
@@ -213,39 +213,39 @@ class Player(xbmc.Player):
                         pass
             else:
                 try:
-                    info[u'artist'] = info[u'artist'][0]
+                    info['artist'] = info['artist'][0]
                 except (KeyError, IndexError):
-                    info[u'artist'] = u'unknown'
-            if u'streamdetails' in info.keys():
-                sd = info.pop(u'streamdetails', {})
+                    info['artist'] = 'unknown'
+            if 'streamdetails' in list(info.keys()):
+                sd = info.pop('streamdetails', {})
                 try:
-                    info[u'stereomode'] = sd[u'video'][0][u'stereomode']
+                    info['stereomode'] = sd['video'][0]['stereomode']
                 except (KeyError, IndexError):
-                    info[u'stereomode'] = u'unknown'
+                    info['stereomode'] = 'unknown'
                 else:
-                    if info[u'stereomode'] == u'':
-                        info[u'stereomode'] = u'unknown'
+                    if info['stereomode'] == '':
+                        info['stereomode'] = 'unknown'
                 try:
-                    info[u'width'] = str(sd[u'video'][0][u'width'])
+                    info['width'] = str(sd['video'][0]['width'])
                 except (KeyError, IndexError):
-                    info[u'width'] = u'unknown'
+                    info['width'] = 'unknown'
                 try:
-                    info[u'height'] = str(sd[u'video'][0][u'height'])
+                    info['height'] = str(sd['video'][0]['height'])
                 except (KeyError, IndexError):
-                    info[u'height'] = u'unknown'
+                    info['height'] = 'unknown'
                 try:
-                    info[u'aspectRatio'] = str(int((sd[u'video'][0][u'aspect'] * 100.0) + 0.5) / 100.0)
+                    info['aspectRatio'] = str(int((sd['video'][0]['aspect'] * 100.0) + 0.5) / 100.0)
                 except (KeyError, IndexError):
-                    info[u'aspectRatio'] = u'unknown'
-            if info[u'mediaType'] == u'episode':
-                items = [u'episode', u'season']
+                    info['aspectRatio'] = 'unknown'
+            if info['mediaType'] == 'episode':
+                items = ['episode', 'season']
                 for item in items:
                     try:
                         info[item] = str(info[item]).zfill(2)
                     except KeyError:
-                        info[item] = u'unknown'
+                        info[item] = 'unknown'
             else:
-                items = [u'episode', u'season', u'showtitle']
+                items = ['episode', 'season', 'showtitle']
                 for item in items:
                     try:
                         del info[item]
@@ -279,24 +279,24 @@ class Player(xbmc.Player):
             self.info = {}
 
     def rectifyUnknowns(self):
-        items = {u'fileName': self.getPlayingFileX, u'aspectRatio': self.getAspectRatio, u'height': self.getResoluion,
-                 u'title': self.getTitle}
-        for item in items.keys():
-            if item not in self.info.keys():
+        items = {'fileName': self.getPlayingFileX, 'aspectRatio': self.getAspectRatio, 'height': self.getResoluion,
+                 'title': self.getTitle}
+        for item in list(items.keys()):
+            if item not in list(self.info.keys()):
                 self.info[item] = items[item]()
             else:
                 try:
-                    if self.info[item] == '' or self.info[item] == u'unknown':
+                    if self.info[item] == '' or self.info[item] == 'unknown':
                         self.info[item] = items[item]()
                 except KeyError:
                     pass
         pt = self.playing_type()
-        if u'mediaType' not in self.info.keys():
-            self.info[u'mediaType'] = pt
+        if 'mediaType' not in list(self.info.keys()):
+            self.info['mediaType'] = pt
         else:
             try:
-                if pt != u'unknown' and self.info[u'mediaType'] != pt:
-                    self.info[u'mediaType'] = pt
+                if pt != 'unknown' and self.info['mediaType'] != pt:
+                    self.info['mediaType'] = pt
             except KeyError:
                 pass
 
@@ -304,27 +304,27 @@ class Player(xbmc.Player):
         try:
             fn = self.getPlayingFile()
         except RuntimeError:
-            fn = u'unknown'
+            fn = 'unknown'
         if fn is None or fn == '':
-            fn = u'unknown'
+            fn = 'unknown'
         return xbmc.translatePath(fn)
 
     @staticmethod
     def getAspectRatio():
         ar = xbmc.getInfoLabel("VideoPlayer.VideoAspect")
         if ar is None:
-            ar = u'unknown'
+            ar = 'unknown'
         elif ar == '':
-            ar = u'unknown'
+            ar = 'unknown'
         return str(ar)
 
     @staticmethod
     def getResoluion():
         vr = xbmc.getInfoLabel("VideoPlayer.VideoResolution")
         if vr is None:
-            vr = u'unknown'
+            vr = 'unknown'
         elif vr == '':
-            vr = u'unknown'
+            vr = 'unknown'
         return str(vr)
 
     def onAVStarted(self):

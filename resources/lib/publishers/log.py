@@ -63,7 +63,7 @@ class LogMonitor(threading.Thread):
 
 class LogPublisher(threading.Thread, Publisher):
 
-    publishes = Events.Log.keys()
+    publishes = list(Events.Log.keys())
 
     def __init__(self, dispatcher, settings):
         Publisher.__init__(self, dispatcher)

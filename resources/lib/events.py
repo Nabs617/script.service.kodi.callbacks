@@ -283,4 +283,4 @@ class Events(object):
 
     @staticmethod
     def _AllEventsSimple():
-        return Events._AllEvents().keys()
+        return list(Events._AllEvents().keys())

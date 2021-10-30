@@ -105,10 +105,6 @@ def start():
     settings = Settings()
     settings.getSettings()
     kl = KodiLogger()
-    if settings.general['elevate_loglevel'] is True:
-        kl.setLogLevel(xbmc.LOGINFO)
-    else:
-        kl.setLogLevel(xbmc.LOGDEBUG)
     log = kl.log
     log(msg=_('Settings read'))
     Cache.dispatcher = PubSub_Threaded.Dispatcher(interval=settings.general['TaskFreq'], sleepfxn=xbmc.sleep)
@@ -134,7 +130,7 @@ def start():
 
 
 def main():
-    msg = _(u'$$$ [kodi.callbacks] - Staring kodi.callbacks ver: %s (%s:build %s) python: %s') % (str(_addonversion_), branch, build, sys.version)
+    msg = _('$$$ [kodi.callbacks] - Staring kodi.callbacks ver: %s (%s:build %s) python: %s') % (str(_addonversion_), branch, build, sys.version)
     xbmc.log(msg=msg, level=xbmc.LOGINFO)
     if branch != 'master':
         xbmcaddon.Addon().setSetting('installed branch', branch)

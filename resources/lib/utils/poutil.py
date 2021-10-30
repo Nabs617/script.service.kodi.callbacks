@@ -160,18 +160,18 @@ class KodiPo(object):
                 ret = strToId
             else:
                 ret = xbmcaddon.Addon(self.addonid).getLocalizedString(int(strid))
-            if ret == u'':  # Occurs with stub or undefined number
+            if ret == '':  # Occurs with stub or undefined number
                 if not NOXBMC:
-                    log(u'Localized string not found for: [%s]' % str(strToId))
+                    log('Localized string not found for: [%s]' % str(strToId))
                 ret = strToId
             return ret
         else:
             if update is True or self.updateAlways is True:
 
-                log(msg=u'Localized string added to po for: [%s]' % strToId)
+                log(msg='Localized string added to po for: [%s]' % strToId)
                 self.updatePo(strid, strToId)
             else:
-                log(msg=u'Localized string id not found for: [%s]' % strToId)
+                log(msg='Localized string id not found for: [%s]' % strToId)
             return strToId
 
     def getLocalizedStringId(self, strToId, update=False):
@@ -190,10 +190,10 @@ class KodiPo(object):
         else:
             if update is True or self.updateAlways is True:
                 self.updatePo(strid, strToId)
-                log(msg=u'Localized string added to po for: [%s]' % strToId)
+                log(msg='Localized string added to po for: [%s]' % strToId)
                 return strid
             else:
-                log(msg=u'Localized string not found for: [%s]' % strToId)
+                log(msg='Localized string not found for: [%s]' % strToId)
                 return 32165
 
     def updatePo(self, strid, txt):
@@ -249,7 +249,7 @@ class PoDict(object):
         """
         if len(self.dict_msgctxt) > 0:
             with PoDict._rlock:
-                mmax = max(iter(self.dict_msgctxt.items()), key=operator.itemgetter(0))[0]
+                mmax = max(iter(list(self.dict_msgctxt.items())), key=operator.itemgetter(0))[0]
         else:
             mmax = '32000'
         try:
@@ -281,7 +281,7 @@ class PoDict(object):
         :rtype:
         """
         with PoDict._lock:
-            if str_msgctxt in self.dict_msgctxt.keys():
+            if str_msgctxt in list(self.dict_msgctxt.keys()):
                 return [True, self.dict_msgctxt[str_msgctxt]]
             else:
                 return [False, None]
@@ -295,7 +295,7 @@ class PoDict(object):
         :rtype:
         """
         with PoDict._lock:
-            if str_msgid in self.dict_msgid.keys():
+            if str_msgid in list(self.dict_msgid.keys()):
                 return [True, self.dict_msgid[str_msgid]]
             else:
                 return [False, str(self.get_new_key())]
@@ -309,7 +309,7 @@ class PoDict(object):
         :rtype:
         """
         if url is None:
-            log(msg=u'No URL to Read PoDict From')
+            log(msg='No URL to Read PoDict From')
             return
         if os.path.exists(url):
             try:
@@ -318,14 +318,14 @@ class PoDict(object):
                 i = 0
                 while i < len(poin):
                     line = poin[i]
-                    if line[0:7] == u'msgctxt':
+                    if line[0:7] == 'msgctxt':
                         t = re.findall(r'".+"', line)
-                        if not t[0].startswith(u'"Addon'):
+                        if not t[0].startswith('"Addon'):
                             str_msgctxt = t[0][2:7]
                             i += 1
                             line2 = poin[i]
                             str_msgid = ''
-                            while not line2.startswith(u'msgstr'):
+                            while not line2.startswith('msgstr'):
                                 str_msgid += self.remsgid.findall(line2)[0]
                                 i += 1
                                 line2 = poin[i]
@@ -336,9 +336,9 @@ class PoDict(object):
                             i += 1
                     i += 1
             except Exception as e:
-                log(msg=u'Error reading po: %s' % str(e))
+                log(msg='Error reading po: %s' % str(e))
         else:
-            log(msg=u'Could not locate po at %s' % url)
+            log(msg='Could not locate po at %s' % url)
 
     def write_to_file(self, url):
         """
@@ -371,24 +371,24 @@ class PoDict(object):
         addoninfo = PoDict.get_addoninfo()
         with codecs.open(url, 'wb', 'UTF-8') as fo:
             PoDict.write_po_header(fo, addoninfo)
-            str_max = max(dict_msgctxt.iteritems(), key=operator.itemgetter(0))[0]
-            str_min = min(dict_msgctxt.iteritems(), key=operator.itemgetter(0))[0]
+            str_max = max(iter(dict_msgctxt.items()), key=operator.itemgetter(0))[0]
+            str_min = min(iter(dict_msgctxt.items()), key=operator.itemgetter(0))[0]
 
-            fo.write(u'msgctxt "Addon Summary"\n')
-            fo.write(u'msgid "%s"\n' % addoninfo['summary'].replace('\n',''))
-            fo.write(u'msgstr ""\n\n')
-            fo.write(u'msgctxt "Addon Description"\n')
-            fo.write(u'msgid "%s"\n' % addoninfo['description'].replace('\n',''))
-            fo.write(u'msgstr ""\n\n')
-            fo.write(u'msgctxt "Addon Disclaimer"\n')
-            fo.write(u'msgid "%s"\n' % addoninfo['disclaimer'].replace('\n',''))
-            fo.write(u'msgstr ""\n\n')
-            fo.write(u'#Add-on messages id=%s to %s\n\n' % (str_min, str_max))
+            fo.write('msgctxt "Addon Summary"\n')
+            fo.write('msgid "%s"\n' % addoninfo['summary'].replace('\n',''))
+            fo.write('msgstr ""\n\n')
+            fo.write('msgctxt "Addon Description"\n')
+            fo.write('msgid "%s"\n' % addoninfo['description'].replace('\n',''))
+            fo.write('msgstr ""\n\n')
+            fo.write('msgctxt "Addon Disclaimer"\n')
+            fo.write('msgid "%s"\n' % addoninfo['disclaimer'].replace('\n',''))
+            fo.write('msgstr ""\n\n')
+            fo.write('#Add-on messages id=%s to %s\n\n' % (str_min, str_max))
             last = int(str_min) - 1
             for str_msgctxt in sorted(dict_msgctxt):
                 if not str_msgctxt.startswith('Addon'):
                     if int(str_msgctxt) != last + 1:
-                        fo.write(u'#empty strings from id %s to %s\n\n' % (str(last + 1), str(int(str_msgctxt) - 1)))
+                        fo.write('#empty strings from id %s to %s\n\n' % (str(last + 1), str(int(str_msgctxt) - 1)))
                     PoDict.write_to_po(fo, str_msgctxt, PoDict.format_string_forpo(dict_msgctxt[str_msgctxt]))
                     last = int(str_msgctxt)
 
@@ -416,22 +416,22 @@ class PoDict(object):
                 ret['version'] = str(root.attrib['version'])
                 itrtr = tree.getiterator(tag='extension')
                 for elem in itrtr:
-                    if elem.attrib['point'] == u"xbmc.addon.metadata":
+                    if elem.attrib['point'] == "xbmc.addon.metadata":
                         citrtr = elem.getiterator()
                         for child in citrtr:
                             if child.attrib == {'lang': 'en'}:
                                 ret[child.tag] = str(child.text).strip()
             except IOError:
-                log(msg=u'Error opening addon.xml file')
+                log(msg='Error opening addon.xml file')
                 return None
             except SyntaxError as e:
-                log(u'Error parsing addon.xml: %s' % str(e))
+                log('Error parsing addon.xml: %s' % str(e))
                 return None
             else:
                 req_elements = ['id', 'name', 'author', 'version', 'summary', 'description', 'disclaimer']
                 for elem in req_elements:
-                    if not ret.has_key(elem):
-                        ret[elem] = u''
+                    if elem not in ret:
+                        ret[elem] = ''
                     return ret
 
     @staticmethod
@@ -446,9 +446,9 @@ class PoDict(object):
         out = ''
         for (i, x) in enumerate(mstr):
             if i == 1 and x == r'"':
-                out += u"\\" + x
-            elif x == r'"' and mstr[i - 1] != u"\\":
-                out += u"\\" + x
+                out += "\\" + x
+            elif x == r'"' and mstr[i - 1] != "\\":
+                out += "\\" + x
             else:
                 out += x
         return out
@@ -464,23 +464,23 @@ class PoDict(object):
         :return:
         :rtype:
         """
-        fo.write(u'# Kodi Media Center language file\n')
-        fo.write(u'# Addon Name: %s\n' % addoninfo['name'])
-        fo.write(u'# Addon id: %s\n' % addoninfo['id'])
-        fo.write(u'# Addon Provider: %s\n' % addoninfo['author'])
-        fo.write(u'msgid ""\n')
-        fo.write(u'msgstr ""\n')
-        fo.write(u'"Project-Id-Version: XBMC Addons\\n"\n')
-        fo.write(u'"Report-Msgid-Bugs-To: alanwww1@xbmc.org\\n"\n')
-        fo.write(u'"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n')
-        fo.write(u'"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n')
-        fo.write(u'"Last-Translator: Kodi Translation Team\\n"\n')
-        fo.write(u'"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\\n"\n')
-        fo.write(u'"MIME-Version: 1.0\\n"\n')
-        fo.write(u'"Content-Type: text/plain; charset=UTF-8\\n"\n')
-        fo.write(u'"Content-Transfer-Encoding: 8bit\\n"\n')
-        fo.write(u'"Language: en\\n"')
-        fo.write(u'"Plural-Forms: nplurals=2; plural=(n != 1);\\n"\n\n')
+        fo.write('# Kodi Media Center language file\n')
+        fo.write('# Addon Name: %s\n' % addoninfo['name'])
+        fo.write('# Addon id: %s\n' % addoninfo['id'])
+        fo.write('# Addon Provider: %s\n' % addoninfo['author'])
+        fo.write('msgid ""\n')
+        fo.write('msgstr ""\n')
+        fo.write('"Project-Id-Version: XBMC Addons\\n"\n')
+        fo.write('"Report-Msgid-Bugs-To: alanwww1@xbmc.org\\n"\n')
+        fo.write('"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n')
+        fo.write('"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n')
+        fo.write('"Last-Translator: Kodi Translation Team\\n"\n')
+        fo.write('"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\\n"\n')
+        fo.write('"MIME-Version: 1.0\\n"\n')
+        fo.write('"Content-Type: text/plain; charset=UTF-8\\n"\n')
+        fo.write('"Content-Transfer-Encoding: 8bit\\n"\n')
+        fo.write('"Language: en\\n"')
+        fo.write('"Plural-Forms: nplurals=2; plural=(n != 1);\\n"\n\n')
 
     @staticmethod
     def write_to_po(fileobject, int_num, str_msg):
@@ -496,10 +496,10 @@ class PoDict(object):
         :rtype:
         """
         w = r'"#' + str(int_num) + r'"'
-        fileobject.write(u'msgctxt ' + w + u'\n')
+        fileobject.write('msgctxt ' + w + '\n')
         fileobject.write(PoDict.splitstring(str_msg))
-        fileobject.write(u'msgstr ' + r'""' + u'\n')
-        fileobject.write(u'\n')
+        fileobject.write('msgstr ' + r'""' + '\n')
+        fileobject.write('\n')
 
     @staticmethod
     def splitstring(s):
@@ -511,24 +511,24 @@ class PoDict(object):
         :rtype:
         """
         ret = []
-        if u'\n' in s:
+        if '\n' in s:
             pass
-        s = s.replace(u'\n', u'~@\n')
-        split = s.split(u'\n')
+        s = s.replace('\n', '~@\n')
+        split = s.split('\n')
         for i in range(0, len(split)):
-            split[i] = split[i].replace(u'~@', u'\n').encode('unicode_escape') #TODO: Fix for unicode errors
+            split[i] = split[i].replace('~@', '\n').encode('unicode_escape') #TODO: Fix for unicode errors
             if i == 0:
-                if (len(split) == 2 and split[i + 1] == u'') or split[i] == u'\\n' or len(split) == 1:
-                    ret.append(u'msgid "%s"\n' % split[i])
+                if (len(split) == 2 and split[i + 1] == '') or split[i] == '\\n' or len(split) == 1:
+                    ret.append('msgid "%s"\n' % split[i])
                 else:
-                    ret.append(u'msgid ""\n')
-                    ret.append(u'"%s"\n' % split[i])
+                    ret.append('msgid ""\n')
+                    ret.append('"%s"\n' % split[i])
             elif i == len(split) - 1:
                 if split[i] != '':
-                    ret.append(u'"%s"\n' % split[i])
+                    ret.append('"%s"\n' % split[i])
             else:
-                ret.append(u'"%s"\n' % split[i])
-        ret = u''.join(ret)
+                ret.append('"%s"\n' % split[i])
+        ret = ''.join(ret)
         return ret
 
     def createreport(self):
@@ -542,11 +542,11 @@ class PoDict(object):
         for x in self.chkdict:
             if not self.chkdict[x]:
                 if cnt == 0:
-                    reportpo = [u'No usage found for the following pairs:']
+                    reportpo = ['No usage found for the following pairs:']
                 msgid = self.dict_msgctxt[x]
-                reportpo.append(u'    %s:%s' % (x, msgid))
+                reportpo.append('    %s:%s' % (x, msgid))
                 cnt += 1
-        ret = u'\n    '.join(reportpo)
+        ret = '\n    '.join(reportpo)
         return ret
 
 
@@ -612,14 +612,14 @@ class UpdatePo(object):
         lstrings = []
         for myfile in files:
             with codecs.open(myfile, 'r', 'utf-8') as f:
-                lines = u''.join(f.readlines())
+                lines = ''.join(f.readlines())
             try:
                 finds = self.find_localizer.findall(lines)
             except re.error:
                 finds = []
             finally:
                 if len(finds) != 1:
-                    log(msg=u'Skipping file: %s, localizer not found' % myfile)
+                    log(msg='Skipping file: %s, localizer not found' % myfile)
                 else:
                     findstr = r"%s\('(.+?)'\)" % finds[0]
                     find = re.compile(findstr)
@@ -657,7 +657,7 @@ def getPlatform():
             ret = 'ios'
         else:
             ret = 'osx'
-    elif 'XBMC_ANDROID_SYSTEM_LIBS' in os.environ.keys():
+    elif 'XBMC_ANDROID_SYSTEM_LIBS' in list(os.environ.keys()):
         ret = 'and'
     else:  # Big assumption here
         ret = 'nix'

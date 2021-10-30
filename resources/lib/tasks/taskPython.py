@@ -35,18 +35,18 @@ class TaskPython(AbstractTask):
     tasktype = 'python'
     variables = [
         {
-            'id':u'pythonfile',
+            'id':'pythonfile',
             'settings':{
-                'default':u'',
-                'label':u'Python file',
+                'default':'',
+                'label':'Python file',
                 'type':'file'
             }
         },
         {
-            'id':u'import',
+            'id':'import',
             'settings':{
-                'default':u'false',
-                'label':u'Import and call run() (default=no)?',
+                'default':'false',
+                'label':'Import and call run() (default=no)?',
                 'type':'bool'
             }
         }
@@ -90,7 +90,7 @@ class TaskPython(AbstractTask):
         try:
             if len(self.runtimeargs) > 0:
                 if useImport is False:
-                    args = u' %s' % ' '.join(args)
+                    args = ' %s' % ' '.join(args)
                     result = xbmc.executebuiltin('XBMC.RunScript(%s, %s)' % (fn, args))
                 else:
                     directory, module_name = os.path.split(self.taskKwargs['pythonfile'])
@@ -104,7 +104,7 @@ class TaskPython(AbstractTask):
                         sys.path[:] = path
             else:
                 if useImport is False:
-                    result = xbmc.executebuiltin(u'XBMC.RunScript(%s)' % fn)
+                    result = xbmc.executebuiltin('XBMC.RunScript(%s)' % fn)
                 else:
 
                     directory, module_name = os.path.split(fn)

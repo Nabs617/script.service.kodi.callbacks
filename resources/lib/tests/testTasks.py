@@ -35,7 +35,7 @@ _ = kodipo.getLocalizedString
 kl = KodiLogger()
 log = kl.log
 events = Events().AllEvents
-isAndroid = 'XBMC_ANDROID_SYSTEM_LIBS' in os.environ.keys()
+isAndroid = 'XBMC_ANDROID_SYSTEM_LIBS' in list(os.environ.keys())
 testdir = translatepath('special://addon/resources/lib/tests')
 setPathExecuteRW(testdir)
 
@@ -44,8 +44,8 @@ def is_xbmc_debug():
     json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.GetSettingValue", "params": {"setting":"debug.showloginfo"} }')
     json_query = str(json_query)
     json_response = json.loads(json_query)
-    if json_response.has_key('result'):
-        if json_response['result'].has_key('value'):
+    if 'result' in json_response:
+        if 'value' in json_response['result']:
             return json_response['result']['value']
         else:
             raise SyntaxError('Bad JSON')
@@ -59,20 +59,20 @@ def getWebserverInfo():
     json_query = str(json_query)
     json_response = json.loads(json_query)
 
-    if json_response.has_key('result') and json_response['result'].has_key('settings') and json_response['result']['settings'] is not None:
+    if 'result' in json_response and 'settings' in json_response['result'] and json_response['result']['settings'] is not None:
         serverEnabled = False
         serverPort = 8080
         serverUser = ''
         serverPassword = ''
         for item in json_response['result']['settings']:
-            if item["id"] == u"services.webserver":
+            if item["id"] == "services.webserver":
                 if item["value"] is True:
                     serverEnabled = True
-            elif item["id"] == u'services.webserverport':
+            elif item["id"] == 'services.webserverport':
                 serverPort = item['value']
-            elif item['id'] == u'services.webserverusername':
+            elif item['id'] == 'services.webserverusername':
                 serverUser = item['value']
-            elif item['id'] == u'services.webserverpassword':
+            elif item['id'] == 'services.webserverpassword':
                 serverPassword = item['value']
         return  serverEnabled, serverPort, serverUser, serverPassword
 

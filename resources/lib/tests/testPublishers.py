@@ -41,7 +41,7 @@ import nose
 # from nose.plugins.skip import SkipTest
 
 def printlog(msg,level=0):
-    print(msg, level)
+    print((msg, level))
 
 
 flexmock(xbmc, log=printlog)
@@ -134,9 +134,9 @@ class testWatchdogStartup(object):
         found = False
         for message in messages:
             assert isinstance(message, Message)
-            assert 'listOfChanges' in message.kwargs.keys()
+            assert 'listOfChanges' in list(message.kwargs.keys())
             tmp = message.kwargs['listOfChanges']
-            if 'FilesCreated' in tmp.keys() and [fn] in tmp.values():
+            if 'FilesCreated' in list(tmp.keys()) and [fn] in list(tmp.values()):
                 found = True
                 assert message.topic == self.topic
         assert found == True

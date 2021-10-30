@@ -36,7 +36,7 @@ except ImportError:
     kodiTP = _translatePathMock
     isStub = True
 else:
-    if kodiTP('special://home') == u'':
+    if kodiTP('special://home') == '':
         isStub = True
         kodiTP = _translatePathMock
     else:
@@ -53,7 +53,7 @@ def getPlatform():
             ret = 'ios'
         else:
             ret = 'osx'
-    elif 'XBMC_ANDROID_SYSTEM_LIBS' in os.environ.keys():
+    elif 'XBMC_ANDROID_SYSTEM_LIBS' in list(os.environ.keys()):
         ret = 'and'
     else:  # Big assumption here
         ret = 'nix'
@@ -66,28 +66,28 @@ def secure_filename(path):
 
 def translatepath(path):
     ret = []
-    if path.lower().startswith(u'special://'):
+    if path.lower().startswith('special://'):
         special = re.split(r'\\|/', path[10:])[0]
-        if special.startswith(u'addondata'):
+        if special.startswith('addondata'):
             myid = re.findall(r'addondata\((.+?)\)', special)
             if len(myid) > 0:
                 ret.append(addondatapath(myid[0]))
             else:
                 ret.append(addondatapath())
-        elif special.startswith(u'addon'):
+        elif special.startswith('addon'):
             myid = re.findall(r'addon\((.+?)\)', special)
             if len(myid) > 0:
                 ret.append(addonpath(myid[0]))
             else:
                 ret.append(addonpath())
         else:
-            ret.append(kodiTP(u'special://%s' % special))
+            ret.append(kodiTP('special://%s' % special))
         path = path[10:]
         ret = ret + re.split(r'\\|/', path)[1:]
     else:
         ret = re.split(r'\\|/', path)
     if ret[0].endswith(':'):
-        ret[0] = u'%s\\' % ret[0]
+        ret[0] = '%s\\' % ret[0]
     for i, r in enumerate(ret):
         ret[i] = secure_filename(r)
     ret = os.path.join(*ret)
@@ -95,7 +95,7 @@ def translatepath(path):
     ret = os.path.expanduser(ret)
     ret = os.path.normpath(ret)
     if path.startswith('/'):
-        ret = u'/%s' % ret
+        ret = '/%s' % ret
 
     # if not os.path.supports_unicode_filenames:
     #     ret = ret.decode('utf-8')
@@ -107,31 +107,31 @@ def translatepath(path):
 def kodiTranslatePathMock(path):
     ret = []
     special = re.split(r'\\|/', path[10:])[0]
-    if special == u'home':
+    if special == 'home':
         ret.append(homepath())
-    elif special == u'logpath':
+    elif special == 'logpath':
         ret.append(logpath())
-    elif special == u'masterprofile' or special == u'userdata':
-        ret = ret + [homepath(), u'userdata']
+    elif special == 'masterprofile' or special == 'userdata':
+        ret = ret + [homepath(), 'userdata']
     return os.path.join(*ret)
 
 
-def addonpath(addon_id=u'script.service.kodi.callbacks'):
+def addonpath(addon_id='script.service.kodi.callbacks'):
     if isStub:
-        path = os.path.join(*[homepath(), u'addons', addon_id])
+        path = os.path.join(*[homepath(), 'addons', addon_id])
     else:
         try:
             path = str(xbmcaddon.Addon(addon_id).getAddonInfo('path'))
         except RuntimeError:
             path = ''
     if path == '':
-        path = os.path.join(*[homepath(), u'addons', addon_id])
+        path = os.path.join(*[homepath(), 'addons', addon_id])
     return path
 
 
-def addondatapath(addon_id=u'script.service.kodi.callbacks'):
+def addondatapath(addon_id='script.service.kodi.callbacks'):
     if isStub:
-        path = os.path.join(*[homepath(), u'userdata', u'addon_data', addon_id])
+        path = os.path.join(*[homepath(), 'userdata', 'addon_data', addon_id])
     else:
         path = os.path.join(*[xbmc.translatePath('special://userdata'), 'addon_data', addon_id])
     return path
@@ -144,7 +144,7 @@ def homepath():
     if isStub:
         return translatepath(paths[getPlatform()])
     else:
-        return xbmc.translatePath(u'special://home')
+        return xbmc.translatePath('special://home')
 
 
 def logpath():
@@ -154,7 +154,7 @@ def logpath():
     if isStub:
         return translatepath(paths[getPlatform()])
     else:
-        return xbmc.translatePath(u'special://logpath')
+        return xbmc.translatePath('special://logpath')
 
 
 def setPathExecuteRW(path):

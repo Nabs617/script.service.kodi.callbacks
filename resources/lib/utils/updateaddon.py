@@ -57,7 +57,7 @@ class UpdateAddon(object):
     @staticmethod
     def currentversion(addonid):
         currentversion = xbmcaddon.Addon(addonid).getAddonInfo('version')
-        if currentversion == u'':  # Running stub
+        if currentversion == '':  # Running stub
             currentversion = '0.9.9'
         return currentversion
 
@@ -315,7 +315,7 @@ class UpdateAddon(object):
 
     @staticmethod
     def setfiledates(rootpath, filedict):
-        for key in filedict.keys():
+        for key in list(filedict.keys()):
             fl = key.split(r'/')
             path = os.path.join(rootpath, *fl)
             if os.path.isfile(path):

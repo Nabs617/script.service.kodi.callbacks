@@ -32,32 +32,32 @@ _ = kodipo.getLocalizedString
 __ = kodipo.getLocalizedStringId
 
 sysplat = sys.platform
-isAndroid = 'XBMC_ANDROID_SYSTEM_LIBS' in os.environ.keys()
+isAndroid = 'XBMC_ANDROID_SYSTEM_LIBS' in list(os.environ.keys())
 
 class TaskScript(AbstractTask):
     tasktype = 'script'
     variables = [
         {
-            'id':u'scriptfile',
+            'id':'scriptfile',
             'settings':{
-                'default':u'',
-                'label':u'Script executable file',
+                'default':'',
+                'label':'Script executable file',
                 'type':'sfile'
             }
         },
         {
-            'id':u'use_shell',
+            'id':'use_shell',
             'settings':{
-                'default':u'false',
-                'label':u'Requires shell?',
+                'default':'false',
+                'label':'Requires shell?',
                 'type':'bool'
             }
         },
         {
-            'id':u'waitForCompletion',
+            'id':'waitForCompletion',
             'settings':{
-                'default':u'true',
-                'label':u'Wait for script to complete?',
+                'default':'true',
+                'label':'Wait for script to complete?',
                 'type':'bool'
             }
         }
@@ -87,7 +87,7 @@ class TaskScript(AbstractTask):
         return True
 
     def run(self):
-        msg = u''
+        msg = ''
         if self.taskKwargs['notify'] is True:
             notify(_('Task %s launching for event: %s') % (self.taskId, str(self.topic)))
         try:
@@ -117,17 +117,17 @@ class TaskScript(AbstractTask):
                 tmpl[i] = fn
                 filefound = True
                 if i == 0:
-                    if os.path.splitext(fn)[1] == u'.sh':
+                    if os.path.splitext(fn)[1] == '.sh':
                         if isAndroid:
-                            sysexecutable = u'/system/bin/sh'
+                            sysexecutable = '/system/bin/sh'
                         elif not sysplat.startswith('win'):
-                            sysexecutable = u'/bin/bash'
+                            sysexecutable = '/bin/bash'
             else:
                 tmpl[i] = tmp
-        if sysexecutable == u'/system/bin/sh':
-            tmpl.insert(0, u'sh')
-        elif sysexecutable == u'/bin/bash':
-            tmpl.insert(0, u'bash')
+        if sysexecutable == '/system/bin/sh':
+            tmpl.insert(0, 'sh')
+        elif sysexecutable == '/bin/bash':
+            tmpl.insert(0, 'bash')
 
         cwd = os.getcwd()
         argsu = tmpl + self.runtimeargs
@@ -137,11 +137,11 @@ class TaskScript(AbstractTask):
             try:
                 args.append(arg.encode(fse))
             except UnicodeEncodeError:
-                msg += u'Unicode Encode Error for: "%s" Encoder: %s' % (arg, fse)
+                msg += 'Unicode Encode Error for: "%s" Encoder: %s' % (arg, fse)
         if needs_shell:
             args = ' '.join(args)
         err = False
-        msg += u'taskScript ARGS = %s\n    SYSEXEC = %s\n BASEDIR = %s\n' % (args, sysexecutable, basedir)
+        msg += 'taskScript ARGS = %s\n    SYSEXEC = %s\n BASEDIR = %s\n' % (args, sysexecutable, basedir)
 
         try:
             if basedir is not None:
@@ -161,15 +161,15 @@ class TaskScript(AbstractTask):
                 if stdoutdata is not None:
                     stdoutdata = stdoutdata.decode(fse, 'ignore').strip()
                     if stdoutdata != '':
-                        msg += _(u'Process returned data: [%s]\n') % stdoutdata
+                        msg += _('Process returned data: [%s]\n') % stdoutdata
                     else:
-                        msg += _(u'Process returned no data\n')
+                        msg += _('Process returned no data\n')
                 else:
-                    msg += _(u'Process returned no data\n')
+                    msg += _('Process returned no data\n')
                 if stderrdata is not None:
                     stderrdata = stderrdata.decode(fse, 'ignore').strip()
                     if stderrdata != '':
-                        msg += _(u'Process returned error: %s') % stderrdata
+                        msg += _('Process returned error: %s') % stderrdata
         except subprocess.CalledProcessError as e:
             err = True
             if hasattr(e, 'output'):

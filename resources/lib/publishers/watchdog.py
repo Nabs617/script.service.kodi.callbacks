@@ -23,8 +23,8 @@ from resources.lib.pubsub import Publisher, Message, Topic
 from resources.lib.events import Events
 from resources.lib.utils.kodipathtools import translatepath
 try:
-    from watchdog.observers import Observer
-    from watchdog.events import PatternMatchingEventHandler
+    from .watchdog.observers import Observer
+    from .watchdog.events import PatternMatchingEventHandler
 except ImportError:
     libs = translatepath('special://addon/resources/lib')
     sys.path.append(libs)
@@ -47,7 +47,7 @@ class EventHandler(PatternMatchingEventHandler):
         self.publish(msg)
 
 class WatchdogPublisher(Publisher):
-    publishes = Events().Watchdog.keys()
+    publishes = list(Events().Watchdog.keys())
 
     def __init__(self, dispatcher, settings):
         super(WatchdogPublisher, self).__init__(dispatcher)

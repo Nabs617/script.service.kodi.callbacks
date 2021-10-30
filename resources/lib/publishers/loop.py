@@ -60,7 +60,7 @@ def getProfileString():
 
 
 class LoopPublisher(threading.Thread, Publisher):
-    publishes = Events().CustomLoop.keys()
+    publishes = list(Events().CustomLoop.keys())
 
     def __init__(self, dispatcher, settings):
         Publisher.__init__(self, dispatcher)
@@ -78,7 +78,7 @@ class LoopPublisher(threading.Thread, Publisher):
                 self.idleTs = []
                 self._startidle = 0
                 self._playeridle = False
-                for key in idleT.keys():
+                for key in list(idleT.keys()):
                     # time, key, executed
                     self.idleTs.append([idleT[key], key, False])
             else:
@@ -90,7 +90,7 @@ class LoopPublisher(threading.Thread, Publisher):
                 self.afterIdles = []
                 self._startidle = 0
                 self._playeridle = False
-                for key in afterIdle.keys():
+                for key in list(afterIdle.keys()):
                     # time, key, triggered
                     self.afterIdles.append([afterIdle[key], key, False])
             else:
@@ -125,7 +125,7 @@ class LoopPublisher(threading.Thread, Publisher):
 
             newwindowid = xbmcgui.getCurrentWindowId()
             if newwindowid != lastwindowid:
-                if lastwindowid in self.closewindowsids.keys():
+                if lastwindowid in list(self.closewindowsids.keys()):
                     self.publish(Message(Topic('onWindowClose', self.closewindowsids[lastwindowid])))
                 if newwindowid in self.openwindowids:
                     self.publish(Message(Topic('onWindowOpen', self.openwindowids[newwindowid])))

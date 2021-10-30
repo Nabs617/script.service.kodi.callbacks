@@ -107,13 +107,13 @@ def createTasks():
                 except KeyError:
                     conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, str(key), curTaskType)
                     if varset['type'] == 'sfile':
-                        labelbrowse = u'%s - browse' % varset['label']
-                        labeledit = u'%s - edit' % varset['label']
+                        labelbrowse = '%s - browse' % varset['label']
+                        labeledit = '%s - edit' % varset['label']
                         taskcontrols.append(
-                            struct.FileBrowser(u'%s.%s' % (prefix, var['id']), labelbrowse, default=varset['default'],
+                            struct.FileBrowser('%s.%s' % (prefix, var['id']), labelbrowse, default=varset['default'],
                                                fbtype=struct.FileBrowser.TYPE_FILE, visible=conditionals))
                         taskcontrols.append(
-                            struct.Text(u'%s.%s' % (prefix, var['id']), labeledit, default=varset['default'],
+                            struct.Text('%s.%s' % (prefix, var['id']), labeledit, default=varset['default'],
                                         visible=conditionals))
                     elif varset['type'] == 'labelenum':
                         Control = struct.getControlClass[mytype]
@@ -152,7 +152,7 @@ def createEvents(tasks):
     podirty = False
     allevts = Events().AllEvents
     evts = []
-    for evtkey in allevts.keys():
+    for evtkey in list(allevts.keys()):
         evts.append(allevts[evtkey]['text'])
     evts.sort()
     evts.insert(0, 'None')
@@ -189,7 +189,7 @@ def createEvents(tasks):
         eventcontrols.append(
             struct.LabelEnum('%s.task' % prefix, 'Task', default='Task 1', lvalues=tasks, visible=conditionals))
 
-        for evtkey in allevts.keys():
+        for evtkey in list(allevts.keys()):
             evt = allevts[evtkey]
             conditionals = struct.Conditional(struct.Conditional.OP_EQUAL, glsid(evt['text']), curEvtType)
             for req in evt['reqInfo']:
@@ -220,7 +220,7 @@ def createEvents(tasks):
             except KeyError:
                 vargs = {}
             vs = []
-            for key in vargs.keys():
+            for key in list(vargs.keys()):
                 vs.append('%s=%s' % (key, vargs[key]))
             vs = ','.join(vs)
             brk = 60

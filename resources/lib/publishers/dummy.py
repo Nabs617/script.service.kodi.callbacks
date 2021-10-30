@@ -21,7 +21,7 @@ from resources.lib.pubsub import Publisher
 
 
 class WatchdogPublisherDummy(Publisher):
-    publishes = Events().Watchdog.keys()
+    publishes = list(Events().Watchdog.keys())
 
     def __init__(self, dispatcher, _):
         super(WatchdogPublisherDummy, self).__init__(dispatcher)
