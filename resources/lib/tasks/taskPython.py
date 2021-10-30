@@ -58,6 +58,7 @@ class TaskPython(AbstractTask):
     @staticmethod
     def validate(taskKwargs, xlog=KodiLogger.log):
         tmp = translatepath(taskKwargs['pythonfile'])
+        xlog(msg=_('Loading: %s') % tmp)
         fse = sys.getfilesystemencoding()
         if fse is None:
             fse = 'utf-8'
@@ -86,22 +87,10 @@ class TaskPython(AbstractTask):
         except KeyError:
             useImport = False
         fn = translatepath(self.taskKwargs['pythonfile'])
-        fse = sys.getfilesystemencoding()
-        if fse is None:
-            fse = 'utf-8'
-        if sys.platform.lower().startswith('win'):
-            if fn.encode('utf-8') != fn.encode(fse):
-                fn = fsencode(fn)
-        else:
-            fn = fn.encode(fse)
         try:
             if len(self.runtimeargs) > 0:
                 if useImport is False:
                     args = u' %s' % ' '.join(args)
-                    try:
-                        args = args.encode(fse)
-                    except UnicodeEncodeError:
-                        msg += 'Unicode Encode Error for "%s" Encoder: %s' % (args, fse)
                     result = xbmc.executebuiltin('XBMC.RunScript(%s, %s)' % (fn, args))
                 else:
                     directory, module_name = os.path.split(self.taskKwargs['pythonfile'])
@@ -109,7 +98,7 @@ class TaskPython(AbstractTask):
                     path = list(sys.path)
                     sys.path.insert(0, directory)
                     try:
-                        module = __import__(module_name.encode('utf-8'))
+                        module = __import__(module_name)
                         result = module.run(args)
                     finally:
                         sys.path[:] = path
@@ -124,7 +113,7 @@ class TaskPython(AbstractTask):
                     path = list(sys.path)
                     sys.path.insert(0, directory)
                     try:
-                        module = __import__(module_name.encode('utf-8'))
+                        module = __import__(module_name)
                         result = module.run(None)
                     finally:
                         sys.path[:] = path

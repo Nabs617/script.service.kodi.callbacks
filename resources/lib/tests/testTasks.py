@@ -18,7 +18,7 @@
 #
 import os
 import sys
-import Queue
+import queue
 import time
 import re
 import traceback
@@ -80,10 +80,10 @@ def getWebserverInfo():
 class testTasks(object):
     def __init__(self):
         self.task = None
-        self.q = Queue.Queue()
+        self.q = queue.Queue()
 
     def clear_q(self):
-        self.q = Queue.Queue()
+        self.q = queue.Queue()
 
     def testHttp(self):
         serverEnabled, serverPort, serverUser, serverPassword = getWebserverInfo()
@@ -99,8 +99,8 @@ class testTasks(object):
             tm.start(topic, **runKwargs)
             try:
                 tr = self.q.get(timeout=1)
-            except Queue.Empty:
-                raise Queue.Empty(_('testHttp never returned'))
+            except queue.Empty:
+                raise queue.Empty(_('testHttp never returned'))
             else:
                 tm.start(topic, **runKwargs)  # Toggle Mute again
             if tr.iserror is True:
@@ -148,7 +148,7 @@ class testTasks(object):
         tm.start(topic, **runKwargs)
         try:
             tr = self.q.get(timeout=2)
-        except Queue.Empty:
+        except queue.Empty:
             raise AssertionError(_('Timed out waiting for return'))
         else:
             if tr.iserror is True:
@@ -177,7 +177,7 @@ class testTasks(object):
         tm.start(topic, **runKwargs)
         try:
             tr = self.q.get(timeout=2)
-        except Queue.Empty:
+        except queue.Empty:
             raise AssertionError(_('Timed out waiting for return'))
         else:
             if tr.iserror is True:
@@ -202,7 +202,7 @@ class testTasks(object):
         tm.start(topic, **runKwargs)
         try:
             tr = self.q.get(timeout=1)
-        except Queue.Empty:
+        except queue.Empty:
             raise AssertionError(_('Timed out waiting for return'))
         if tr.iserror is True:
             log(loglevel=xbmc.LOGERROR, msg=_('testPythonImport returned with an error: %s') % tr.msg)
@@ -231,7 +231,7 @@ class testTasks(object):
         tm.start(topic, **runKwargs)
         try:
             tr = self.q.get(timeout=1)
-        except Queue.Empty:
+        except queue.Empty:
             raise AssertionError(_('Timed out waiting for return'))
         if tr.iserror is True:
             log(loglevel=xbmc.LOGERROR, msg=_('testPythonExternal returned with an error: %s') % tr.msg)
@@ -254,7 +254,6 @@ class testTasks(object):
                  self.testPythonImport]
         for test in tests:
             testname = test.__name__
-            sys.exc_clear()
             try:
                 test()
             except AssertionError as e:

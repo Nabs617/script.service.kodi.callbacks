@@ -32,7 +32,7 @@ from resources.lib.pubsub import Dispatcher, Subscriber, Message, Topic
 from resources.lib.settings import Settings
 from resources.lib.utils.kodipathtools import translatepath, setPathRW
 from flexmock import flexmock
-import Queue
+import queue
 import threading
 import time
 import nose
@@ -54,7 +54,7 @@ def sleep(xtime):
 class MockSubscriber(Subscriber):
     def __init__(self):
         super(MockSubscriber, self).__init__()
-        self.testq = Queue.Queue()
+        self.testq = queue.Queue()
 
     def notify(self, message):
         self.testq.put(message)
@@ -64,7 +64,7 @@ class MockSubscriber(Subscriber):
         while not self.testq.empty():
             try:
                 message = self.testq.get(timeout=1)
-            except Queue.Empty:
+            except queue.Empty:
                 pass
             else:
                 messages.append(message)
@@ -121,7 +121,7 @@ class testWatchdogStartup(object):
         self.publisher.start()
         self.publisher.abort()
         time.sleep(1)
-        self.subscriber.testq = Queue.Queue()
+        self.subscriber.testq = queue.Queue()
         with open(fn, 'w') as f:
             f.writelines('test')
         time.sleep(1)
@@ -575,7 +575,7 @@ class TestSchedule(object):
         self.publisher.dailyAlarms = []
         self.publisher.sleep = time.sleep
         self.publisher.sleepinterval = 1
-        self.subscriber.testq = Queue.Queue()
+        self.subscriber.testq = queue.Queue()
         self.subscriber.addTopic(self.topics[0])
         self.dispatcher.addSubscriber(self.subscriber)
         self.dispatcher.start()

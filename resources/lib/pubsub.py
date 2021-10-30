@@ -120,7 +120,7 @@ class Message(object):
 class Dispatcher(threading.Thread):
     def __init__(self, interval=0.1, sleepfxn=time.sleep):
         super(Dispatcher, self).__init__(name='Dispatcher')
-        self._message_q = Queue()
+        self._message_q = queue()
         self._abort_evt = threading.Event()
         self._abort_evt.clear()
         self.subscribers = []
@@ -202,7 +202,7 @@ class Task(threading.Thread):
         self.kwargs = {}
         self.userargs = []
         self.topic = None
-        self.returnQ = Queue()
+        self.returnQ = queue()
 
     def t_start(self, topic, *args, **kwargs):
 

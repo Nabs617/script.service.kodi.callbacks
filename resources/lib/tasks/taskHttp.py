@@ -17,11 +17,8 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys
-import traceback
 import requests
 import urllib
-import http.client
 from urllib.parse import urlparse
 import socket
 from resources.lib.taskABC import AbstractTask, KodiLogger, notify
@@ -120,7 +117,6 @@ class TaskHttp(AbstractTask):
         except (AttributeError, UnicodeDecodeError):
             pb = u''
         msg = u'Prepped URL: %s\nBody: %s' % (pu, pb)
-        sys.exc_clear()
         try:
             resp = session.send(prepped, timeout=20)
             msg += u'\nStatus: %s' % resp.status_code
