@@ -18,6 +18,7 @@
 #
 
 import xbmc
+import xbmcvfs
 import threading
 from queue import Queue, Empty
 import re
@@ -28,7 +29,7 @@ from resources.lib.utils.poutil import KodiPo
 kodipo = KodiPo()
 _ = kodipo.getLocalizedString
 
-logfn = xbmc.translatePath(r'special://logpath/kodi.log')
+logfn = xbmcvfs.translatePath(r'special://logpath/kodi.log')
 
 class LogMonitor(threading.Thread):
     def __init__(self, interval=100):

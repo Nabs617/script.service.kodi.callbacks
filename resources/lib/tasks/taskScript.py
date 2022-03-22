@@ -73,7 +73,7 @@ class TaskScript(AbstractTask):
         tmpl = process_cmdline(taskKwargs['scriptfile'])
         found = False
         for tmp in tmpl:
-            tmp = xbmc.translatePath(tmp)
+            tmp = xbmcvfs.translatePath(tmp)
             if xbmcvfs.exists(tmp) or os.path.exists(tmp) and found is False:
                 try:
                     mode = os.stat(tmp).st_mode
@@ -110,7 +110,7 @@ class TaskScript(AbstractTask):
         basedir = None
         sysexecutable = None
         for i, tmp in enumerate(tmpl):
-            tmp = str(xbmc.translatePath(tmp))
+            tmp = str(xbmcvfs.translatePath(tmp))
             if os.path.exists(tmp) and filefound is False:
                 basedir, fn = os.path.split(tmp)
                 basedir = os.path.realpath(basedir)
