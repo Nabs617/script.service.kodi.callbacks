@@ -23,6 +23,7 @@ import stat
 import sys
 
 import xbmc
+import xbmcvfs
 import xbmcaddon
 
 
@@ -133,7 +134,7 @@ def addondatapath(addon_id='script.service.kodi.callbacks'):
     if isStub:
         path = os.path.join(*[homepath(), 'userdata', 'addon_data', addon_id])
     else:
-        path = os.path.join(*[xbmc.translatePath('special://userdata'), 'addon_data', addon_id])
+        path = os.path.join(*[xbmcvfs.translatePath('special://userdata'), 'addon_data', addon_id])
     return path
 
 
@@ -144,7 +145,7 @@ def homepath():
     if isStub:
         return translatepath(paths[getPlatform()])
     else:
-        return xbmc.translatePath('special://home')
+        return xbmcvfs.translatePath('special://home')
 
 
 def logpath():
@@ -154,7 +155,7 @@ def logpath():
     if isStub:
         return translatepath(paths[getPlatform()])
     else:
-        return xbmc.translatePath('special://logpath')
+        return xbmcvfs.translatePath('special://logpath')
 
 
 def setPathExecuteRW(path):

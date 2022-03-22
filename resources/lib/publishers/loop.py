@@ -23,6 +23,7 @@ import time
 from json import loads as jloads
 
 import xbmc
+import xbmcvfs
 import xbmcgui
 from resources.lib.events import Events
 from resources.lib.pubsub import Publisher, Message, Topic
@@ -55,7 +56,7 @@ def getProfileString():
     Retrieves the current profile as a path
     @rtype: str
     """
-    ps = xbmc.translatePath('special://profile')
+    ps = xbmcvfs.translatePath('special://profile')
     return ps
 
 

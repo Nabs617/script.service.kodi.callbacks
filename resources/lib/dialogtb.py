@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import xbmc
+import xbmcvfs
 import xbmcgui
 import xbmcaddon
 import textwrap
@@ -60,8 +60,9 @@ class MessageDialog(xbmcgui.WindowXMLDialog):
 
 def show_textbox(title, msg):
     _addon_ = xbmcaddon.Addon('script.service.kodi.callbacks')
-    _cwd_ = xbmc.translatePath(_addon_.getAddonInfo('path'))
+    _cwd_ = xbmcvfs.translatePath(_addon_.getAddonInfo('path'))
     msgbox = MessageDialog("DialogTextBox.xml", _cwd_, "Default")
+
     xt = type(msg)
     if xt is str:
         wmsg = '\n'.join(textwrap.wrap(msg, 62))

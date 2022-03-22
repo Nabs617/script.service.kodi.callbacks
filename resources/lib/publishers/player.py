@@ -20,6 +20,7 @@ import json
 import threading
 
 import xbmc
+import xbmcvfs
 from resources.lib.events import Events
 from resources.lib.pubsub import Publisher, Topic, Message
 from resources.lib.utils.poutil import KodiPo
@@ -307,7 +308,7 @@ class Player(xbmc.Player):
             fn = 'unknown'
         if fn is None or fn == '':
             fn = 'unknown'
-        return xbmc.translatePath(fn)
+        return xbmcvfs.translatePath(fn)
 
     @staticmethod
     def getAspectRatio():

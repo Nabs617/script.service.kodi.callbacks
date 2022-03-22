@@ -28,6 +28,7 @@ libs = translatepath('special://addon/resources/lib/watchdog')
 sys.path.append(libs)
 
 import xbmc
+import xbmcvfs
 from resources.lib.events import Events
 from resources.lib.watchdog.utils.dirsnapshot import DirectorySnapshot, DirectorySnapshotDiff
 from resources.lib.watchdog.observers import Observer
@@ -122,7 +123,7 @@ class WatchdogStartup(Publisher):
     def abort(self, *args):
         snapshots = {}
         for setting in self.settings:
-            folder = xbmc.translatePath(setting['ws_folder'])
+            folder = xbmcvfs.translatePath(setting['ws_folder'])
             if folder == '':
                 folder = setting['ws_folder']
             folder = translatepath(folder)
