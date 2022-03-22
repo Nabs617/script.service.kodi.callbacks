@@ -22,7 +22,7 @@ import threading
 def log(loglevel=xbmc.LOGINFO, msg=''):
     if isinstance(msg, str):
         msg = msg.decode("utf-8")
-    message = u"$$$ [%s] - %s" % ('kodi.callbacks', msg)
+    message = "$$$ [%s] - %s" % ('kodi.callbacks', msg)
     xbmc.log(msg=message.encode("utf-8"), level=loglevel)
 
 class KodiLogger(object):
@@ -61,7 +61,7 @@ class KodiLogger(object):
             loglevel = KodiLogger.selfloglevel
         msg = str(msg)
         if KodiLogger.kodirunning:
-            message = u"$$$ [%s] - %s" % (u'kodi.callbacks', msg)
+            message = "$$$ [%s] - %s" % ('kodi.callbacks', msg)
             xbmc.log(msg=message, level=loglevel)
         else:
             print(msg)

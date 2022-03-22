@@ -31,10 +31,10 @@ class TaskJsonNotify(AbstractTask):
     tasktype = 'json_rpc_notify'
     variables = [
         {
-            'id':u'jsonnotify',
+            'id':'jsonnotify',
             'settings':{
-                'default':u'kodi.callbacks',
-                'label':u'Sender string',
+                'default':'kodi.callbacks',
+                'label':'Sender string',
                 'type':'text'
             }
         },
@@ -55,7 +55,7 @@ class TaskJsonNotify(AbstractTask):
         message = str(self.topic)
         data = json.dumps(self.publisherKwargs)
         try:
-            qs = u'{ "jsonrpc": "2.0", "id": 0, "method": "JSONRPC.NotifyAll", "params": {"sender":"%s", "message":"%s", "data":%s} }' %(self.taskKwargs['jsonnotify'], message, data)
+            qs = '{ "jsonrpc": "2.0", "id": 0, "method": "JSONRPC.NotifyAll", "params": {"sender":"%s", "message":"%s", "data":%s} }' %(self.taskKwargs['jsonnotify'], message, data)
             qs = qs.encode('utf-8', 'ignore')
             json_query = xbmc.executeJSONRPC(qs)
             json_query = str(json_query, 'utf-8', 'ignore')
@@ -64,12 +64,12 @@ class TaskJsonNotify(AbstractTask):
             err = True
             msg = str(e)
         else:
-            if json_response.has_key('result'):
-                if json_response['result'] != u'OK':
+            if 'result' in json_response:
+                if json_response['result'] != 'OK':
                     err = True
-                    msg = u'JSON Notify Error %s' % json_response['result']
+                    msg = 'JSON Notify Error %s' % json_response['result']
             else:
                 err = True
-                msg = u'JSON Notify Error: %s' % str(json_response)
+                msg = 'JSON Notify Error: %s' % str(json_response)
 
         self.threadReturn(err, msg)

@@ -75,7 +75,7 @@ for package in packages:
     prefix = package.__name__ + "."
     for importer, modname, ispkg in pkgutil.iter_modules(package.__path__, prefix):
         module = __import__(modname, fromlist="dummy")
-        for name, cls in module.__dict__.items():
+        for name, cls in list(module.__dict__.items()):
             try:
                 if issubclass(cls, AbstractTask):
                     if cls.tasktype != 'abstract':

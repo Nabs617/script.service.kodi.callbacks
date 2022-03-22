@@ -43,7 +43,7 @@ def showNotification(args, kwargs):
         mdialog = xbmcgui.Dialog()
         argmsg = ", ".join(args)
         kwargmsg = []
-        for key in kwargs.keys():
+        for key in list(kwargs.keys()):
             kwargmsg.append('%s:%s' % (key, kwargs[key]))
         mdialog.ok('Test', 'args: %s\nkwargs:: %s' % (argmsg, ', '.join(kwargmsg)))
 

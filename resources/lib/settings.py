@@ -87,7 +87,7 @@ class Settings(object):
         self.events = {}
         self.general = {}
         rl = {}
-        for key in Settings.allevents.keys():
+        for key in list(Settings.allevents.keys()):
             evt = Settings.allevents[key]
             rl[evt['text']] = key
         Settings.eventsReverseLookup = rl
@@ -107,7 +107,7 @@ class Settings(object):
 
     def getTaskSettings(self):
         for i in range(1, 11):
-            pid = u'T%s' % str(i)
+            pid = 'T%s' % str(i)
             tsk = self.getTaskSetting(pid)
             if tsk is not None:
                 self.tasks[pid] = tsk
@@ -115,20 +115,20 @@ class Settings(object):
     @staticmethod
     def getTaskSetting(pid):
         tsk = {}
-        tasktype = get(u'%s.type' % pid, 'text')
+        tasktype = get('%s.type' % pid, 'text')
         if tasktype == 'none':
             return None
         else:
             tsk['type'] = tasktype
             for suff in Settings.taskSuffixes['general']:
-                tsk[suff[0]] = get(u'%s.%s' % (pid, suff[0]), suff[1])
+                tsk[suff[0]] = get('%s.%s' % (pid, suff[0]), suff[1])
             for var in taskdict[tasktype]['variables']:
-                tsk[var['id']] = get(u'%s.%s' % (pid, var['id']), var['settings']['type'])
+                tsk[var['id']] = get('%s.%s' % (pid, var['id']), var['settings']['type'])
             return tsk
 
     def getEventSettings(self):
         for i in range(1, 11):
-            pid = u"E%s" % str(i)
+            pid = "E%s" % str(i)
             evt = self.getEventSetting(pid)
             if evt is not None:
                 self.events[pid] = evt
@@ -136,20 +136,20 @@ class Settings(object):
     @staticmethod
     def getEventSetting(pid):
         evt = {}
-        et = get(u'%s.type' % pid, 'text')
+        et = get('%s.type' % pid, 'text')
         if et == podict.has_msgid('None')[1]:
             return
         else:
             et = _(et)
             et = Settings.eventsReverseLookup[et]
             evt['type'] = et
-        tsk = get(u'%s.task' % pid, 'text')
-        if tsk == u'' or tsk.lower() == u'none':
+        tsk = get('%s.task' % pid, 'text')
+        if tsk == '' or tsk.lower() == 'none':
             return None
-        evt['task'] = u'T%s' % int(tsk[5:])
+        evt['task'] = 'T%s' % int(tsk[5:])
         for ri in Settings.allevents[et]['reqInfo']:
-            evt[ri[0]] = get(u'%s.%s' % (pid, ri[0]), ri[1])
-        evt['userargs'] = get(u'%s.userargs' % pid, 'text')
+            evt[ri[0]] = get('%s.%s' % (pid, ri[0]), ri[1])
+        evt['userargs'] = get('%s.userargs' % pid, 'text')
         return evt
 
     @staticmethod
@@ -170,7 +170,7 @@ class Settings(object):
 
     def getOpenwindowids(self):
         ret = {}
-        for evtkey in self.events.keys():
+        for evtkey in list(self.events.keys()):
             evt = self.events[evtkey]
             if evt['type'] == 'onWindowOpen':
                 ret[evt['windowIdO']] = evtkey
@@ -178,7 +178,7 @@ class Settings(object):
 
     def getClosewindowids(self):
         ret = {}
-        for evtkey in self.events.keys():
+        for evtkey in list(self.events.keys()):
             evt = self.events[evtkey]
             if evt['type'] == 'onWindowClose':
                 ret[evt['windowIdC']] = evtkey
@@ -186,7 +186,7 @@ class Settings(object):
 
     def getEventsByType(self, eventType):
         ret = []
-        for key in self.events.keys():
+        for key in list(self.events.keys()):
             evt = self.events[key]
             if evt['type'] == eventType:
                 evt['key'] = key

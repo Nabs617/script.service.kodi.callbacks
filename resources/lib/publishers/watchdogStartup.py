@@ -53,13 +53,13 @@ class EventHandler(PatternMatchingEventHandler):
             et = 'Dirs%s' % event.event_type.capitalize()
         else:
             et = 'Files%s' % event.event_type.capitalize()
-        if et in self.data.keys():
+        if et in list(self.data.keys()):
             self.data[et].append(event.src_path)
         else:
             self.data[et] = [event.src_path]
 
 class WatchdogStartup(Publisher):
-    publishes = Events().WatchdogStartup.keys()
+    publishes = list(Events().WatchdogStartup.keys())
 
     def __init__(self, dispatcher, settings):
         super(WatchdogStartup, self).__init__(dispatcher)
@@ -74,12 +74,12 @@ class WatchdogStartup(Publisher):
                 newsnapshot = DirectorySnapshot(folder, recursive=setting['ws_recursive'])
                 newsnapshots[folder] = newsnapshot
                 if oldsnapshots is not None:
-                    if folder in oldsnapshots.keys():
+                    if folder in list(oldsnapshots.keys()):
                         oldsnapshot = oldsnapshots[folder]
                         diff = DirectorySnapshotDiff(oldsnapshot, newsnapshot)
                         changes = self.getChangesFromDiff(diff)
                         if len(changes) > 0:
-                            eh = EventHandler(patterns=setting['ws_patterns'].split(u','), ignore_patterns=setting['ws_ignore_patterns'].split(u','),
+                            eh = EventHandler(patterns=setting['ws_patterns'].split(','), ignore_patterns=setting['ws_ignore_patterns'].split(','),
                                               ignore_directories=setting['ws_ignore_directories'])
                             observer = Observer()
                             try:
@@ -99,7 +99,7 @@ class WatchdogStartup(Publisher):
                                 self.publish(message)
             else:
                 message = Message(Topic('onStartupFileChanges', setting['key']), listOfChanges=[{'DirsDeleted':folder}])
-                log(msg=_(u'Watchdog Startup folder not found: %s') % folder)
+                log(msg=_('Watchdog Startup folder not found: %s') % folder)
                 self.publish(message)
 
     @staticmethod
@@ -107,7 +107,7 @@ class WatchdogStartup(Publisher):
         ret = []
         events = {'dirs_created':(EVENT_TYPE_CREATED, True), 'dirs_deleted':(EVENT_TYPE_DELETED, True), 'dirs_modified':(EVENT_TYPE_MODIFIED, True), 'dirs_moved':(EVENT_TYPE_MOVED, True),
                   'files_created':(EVENT_TYPE_CREATED, False), 'files_deleted':(EVENT_TYPE_DELETED, False), 'files_modified':(EVENT_TYPE_MODIFIED, False), 'files_moved':(EVENT_TYPE_MOVED, False)}
-        for event in events.keys():
+        for event in list(events.keys()):
             try:
                 mylist = diff.__getattribute__(event)
             except AttributeError:
@@ -124,7 +124,7 @@ class WatchdogStartup(Publisher):
         snapshots = {}
         for setting in self.settings:
             folder = xbmcvfs.translatePath(setting['ws_folder'])
-            if folder == u'':
+            if folder == '':
                 folder = setting['ws_folder']
             folder = translatepath(folder)
             if os.path.exists(folder):

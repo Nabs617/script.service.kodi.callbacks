@@ -45,7 +45,7 @@ except Exception:
 
 if sys.version_info[0] == 2 and platform.is_windows():
     # st_ino is not implemented in os.stat on this platform
-    import win32stat
+    from . import win32stat
     stat = win32stat.stat
 else:
     stat = os.stat

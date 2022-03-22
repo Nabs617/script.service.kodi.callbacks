@@ -35,18 +35,18 @@ class TaskPython(AbstractTask):
     tasktype = 'python'
     variables = [
         {
-            'id':u'pythonfile',
+            'id':'pythonfile',
             'settings':{
-                'default':u'',
-                'label':u'Python file',
+                'default':'',
+                'label':'Python file',
                 'type':'file'
             }
         },
         {
-            'id':u'import',
+            'id':'import',
             'settings':{
-                'default':u'false',
-                'label':u'Import and call run() (default=no)?',
+                'default':'false',
+                'label':'Import and call run() (default=no)?',
                 'type':'bool'
             }
         }
@@ -58,6 +58,7 @@ class TaskPython(AbstractTask):
     @staticmethod
     def validate(taskKwargs, xlog=KodiLogger.log):
         tmp = translatepath(taskKwargs['pythonfile'])
+        xlog(msg=_('Loading: %s') % tmp)
         fse = sys.getfilesystemencoding()
         if fse is None:
             fse = 'utf-8'
@@ -86,22 +87,10 @@ class TaskPython(AbstractTask):
         except KeyError:
             useImport = False
         fn = translatepath(self.taskKwargs['pythonfile'])
-        fse = sys.getfilesystemencoding()
-        if fse is None:
-            fse = 'utf-8'
-        if sys.platform.lower().startswith('win'):
-            if fn.encode('utf-8') != fn.encode(fse):
-                fn = fsencode(fn)
-        else:
-            fn = fn.encode(fse)
         try:
             if len(self.runtimeargs) > 0:
                 if useImport is False:
-                    args = u' %s' % ' '.join(args)
-                    try:
-                        args = args.encode(fse)
-                    except UnicodeEncodeError:
-                        msg += 'Unicode Encode Error for "%s" Encoder: %s' % (args, fse)
+                    args = ' %s' % ' '.join(args)
                     result = xbmc.executebuiltin('XBMC.RunScript(%s, %s)' % (fn, args))
                 else:
                     directory, module_name = os.path.split(self.taskKwargs['pythonfile'])
@@ -109,13 +98,13 @@ class TaskPython(AbstractTask):
                     path = list(sys.path)
                     sys.path.insert(0, directory)
                     try:
-                        module = __import__(module_name.encode('utf-8'))
+                        module = __import__(module_name)
                         result = module.run(args)
                     finally:
                         sys.path[:] = path
             else:
                 if useImport is False:
-                    result = xbmc.executebuiltin(u'XBMC.RunScript(%s)' % fn)
+                    result = xbmc.executebuiltin('XBMC.RunScript(%s)' % fn)
                 else:
 
                     directory, module_name = os.path.split(fn)
@@ -124,7 +113,7 @@ class TaskPython(AbstractTask):
                     path = list(sys.path)
                     sys.path.insert(0, directory)
                     try:
-                        module = __import__(module_name.encode('utf-8'))
+                        module = __import__(module_name)
                         result = module.run(None)
                     finally:
                         sys.path[:] = path

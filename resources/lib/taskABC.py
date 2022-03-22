@@ -34,11 +34,10 @@ def notify(msg):
     dialog.notification('Kodi Callbacks', msg, xbmcgui.NOTIFICATION_INFO, 5000)
 
 
-class AbstractTask(threading.Thread):
+class AbstractTask(threading.Thread, metaclass=abc.ABCMeta):
     """
     Abstract class for command specific workers to follow
     """
-    __metaclass__ = abc.ABCMeta
     tasktype = 'abstract'
     lock = threading.RLock()
 
@@ -61,7 +60,7 @@ class AbstractTask(threading.Thread):
         if self.userargs == '':
             return []
         ret = copy.copy(self.userargs)
-        ret = ret.replace(r'%%', u'{@literal%@}')
+        ret = ret.replace(r'%%', '{@literal%@}')
         if self.tasktype == 'script' or self.tasktype == 'python':
             tmp = self.delimitregex.sub(r'{@originaldelim@}', ret)
             ret = tmp
@@ -70,20 +69,20 @@ class AbstractTask(threading.Thread):
         except KeyError:
             pass
         else:
-            for key in varArgs.keys():
+            for key in list(varArgs.keys()):
                 try:
                     kw = str(kwargs[varArgs[key]])
-                    kw = kw.replace(u" ", u'%__')
+                    kw = kw.replace(" ", '%__')
                     ret = ret.replace(key, kw)
                 except KeyError:
                     pass
                 except UnicodeError:
                     pass
-        ret = ret.replace(u'%__', u" ")
-        ret = ret.replace(u'%_', u",")
-        ret = ret.replace(u'{@literal%@}', r'%')
+        ret = ret.replace('%__', " ")
+        ret = ret.replace('%_', ",")
+        ret = ret.replace('{@literal%@}', r'%')
         if self.tasktype == 'script' or self.tasktype == 'python':
-            ret = ret.split(u'{@originaldelim@}') # need to split first to avoid unicode error
+            ret = ret.split('{@originaldelim@}') # need to split first to avoid unicode error
             # if self.tasktype == 'script':
             #     fse = sys.getfilesystemencoding()
             #     ret = []

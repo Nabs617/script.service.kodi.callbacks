@@ -54,10 +54,6 @@ def test(key):
     events = Events().AllEvents
     settings = Settings()
     settings.getSettings()
-    if settings.general['elevate_loglevel'] is True:
-        KodiLogger.setLogLevel(xbmc.LOGINFO)
-    else:
-        KodiLogger.setLogLevel(xbmc.LOGDEBUG)
     log(msg=_('Settings for test read'))
     evtsettings = settings.events[key]
     topic = settings.topicFromSettingsEvent(key)

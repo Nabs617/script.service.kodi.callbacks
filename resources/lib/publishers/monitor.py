@@ -25,7 +25,7 @@ kodipo = KodiPo()
 _ = kodipo.getLocalizedString
 
 class MonitorPublisher(threading.Thread, Publisher):
-    publishes = Events().Monitor.keys()
+    publishes = list(Events().Monitor.keys())
 
     def __init__(self, dispatcher, settings):
         Publisher.__init__(self, dispatcher)
