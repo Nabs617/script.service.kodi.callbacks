@@ -38,6 +38,8 @@ Classes
 
 import sys
 import collections
+from collections import abc
+collections.MutableSet = abc.MutableSet
 from .compat import queue
 
 class SkipRepeatsQueue(queue.Queue):
