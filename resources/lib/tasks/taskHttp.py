@@ -17,6 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import http.client
 import requests
 import urllib.request, urllib.parse, urllib.error
 from urllib.parse import urlparse
@@ -102,7 +103,7 @@ class TaskHttp(AbstractTask):
         req = requests.Request(verb, url, data=data)
         try:
             prepped = session.prepare_request(req)
-        except httplib.InvalidURL as e:
+        except http.client.InvalidURL as e:
             err = True
             msg = str(e)
             return err, msg
@@ -125,7 +126,7 @@ class TaskHttp(AbstractTask):
             if resp.text == '':
                 respmsg = 'No response received'
             else:
-                respmsg = resp.text.decode('unicode_escape', 'ignore')
+                respmsg = resp.text
             msg += '\nResponse for %s: %s' %(verb, respmsg)
             resp.close()
         except requests.ConnectionError:
@@ -149,10 +150,10 @@ class TaskHttp(AbstractTask):
         except urllib.error.URLError as e:
             err = True
             msg = _('URLError\n') + str(e.reason)
-        except httplib.BadStatusLine:
+        except http.client.BadStatusLine:
             err = False
             self.log(msg=_('Http Bad Status Line caught and passed'))
-        except httplib.HTTPException as e:
+        except http.client.HTTPException as e:
             err = True
             msg = _('HTTPException\n') + str(e)
         except socket.timeout:
